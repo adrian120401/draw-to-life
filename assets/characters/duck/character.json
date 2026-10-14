@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "id": "duck",
+  "species": "duck",
+  "creature": "friendly creature",
+  "name": "Pato",
+  "canvas": [
+    512,
+    512
+  ],
+  "palette": [
+    "#F8D75A",
+    "#FFAA42",
+    "#F08B86"
+  ],
+  "layers": [
+    {
+      "id": "body",
+      "parent": null,
+      "pivot": [
+        256.0,
+        442.0
+      ],
+      "texture": "textures/body.png",
+      "color_role": "primary",
+      "motion": "breathe",
+      "generated": true
+    },
+    {
+      "id": "belly",
+      "parent": "body",
+      "pivot": [
+        256.0,
+        367.0
+      ],
+      "texture": "textures/belly.png",
+      "color_role": "secondary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "wing_left",
+      "parent": "body",
+      "pivot": [
+        177.0,
+        325.0
+      ],
+      "texture": "textures/wing_left.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false,
+      "texture_source": "body"
+    },
+    {
+      "id": "wing_right",
+      "parent": "body",
+      "pivot": [
+        335.0,
+        325.0
+      ],
+      "texture": "textures/wing_right.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false,
+      "texture_source": "body"
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "pivot": [
+        256.0,
+        298.0
+      ],
+      "texture": "textures/head.png",
+      "color_role": "primary",
+      "motion": "head",
+      "generated": true
+    },
+    {
+      "id": "bill",
+      "parent": "head",
+      "pivot": [
+        256.0,
+        278.0
+      ],
+      "texture": "textures/bill.png",
+      "color_role": "secondary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "blush",
+      "parent": "head",
+      "pivot": [
+        256.0,
+        258.0
+      ],
+      "texture": "textures/blush.png",
+      "color_role": "accent",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "eye_left",
+      "parent": "head",
+      "pivot": [
+        207.0,
+        224.0
+      ],
+      "texture": "textures/eye_left.png",
+      "color_role": null,
+      "motion": "blink",
+      "generated": false
+    },
+    {
+      "id": "eye_right",
+      "parent": "head",
+      "pivot": [
+        305.0,
+        224.0
+      ],
+      "texture": "textures/eye_right.png",
+      "color_role": null,
+      "motion": "blink",
+      "generated": false
+    },
+    {
+      "id": "mouth",
+      "parent": "head",
+      "pivot": [
+        256.0,
+        280.0
+      ],
+      "texture": "textures/mouth.png",
+      "color_role": null,
+      "motion": "smile",
+      "generated": false
+    }
+  ],
+  "face_bounds": [
+    153.0,
+    162.0,
+    359.0,
+    306.0
+  ],
+  "animations": {
+    "idle": {
+      "duration": 3.2,
+      "loop": true,
+      "breath_scale": 0.018,
+      "head_degrees": 1.5
+    },
+    "blink": {
+      "duration": 0.18,
+      "interval": 4.3
+    },
+    "react": {
+      "duration": 0.85,
+      "jump": 0.025,
+      "tilt_degrees": 8
+    }
+  },
+  "provenance": {
+    "status": "generated",
+    "operation": "create",
+    "model": "Lykon/dreamshaper-8",
+    "model_revision": "a7e52b98680b1ba8ff7bce97c7f9f2e2e5337917",
+    "control_revision": "3564ec7b87dd706d5fc760d21c9e90bb160d1e9f",
+    "parts": [
+      {
+        "layer": "body",
+        "seed": 42,
+        "prompt": "one rounded cartoon shape, smooth blank surface, vibrant color, soft cel shading, children's game mascot texture, clean outline, white background",
+        "negative_prompt": "photo, realistic, 3d render, scary, human, eyes, mouth, face, text, watermark, extra objects, paper texture, messy sketch, patterned surface",
+        "device": "cuda",
+        "warnings": [],
+        "reused_checkpoint": false,
+        "safety_checked": false
+      },
+      {
+        "layer": "head",
+        "seed": 43,
+        "prompt": "one rounded cartoon shape, smooth blank surface, vibrant color, soft cel shading, children's game mascot texture, clean outline, white background",
+        "negative_prompt": "photo, realistic, 3d render, scary, human, eyes, mouth, face, text, watermark, extra objects, paper texture, messy sketch, patterned surface",
+        "device": "cuda",
+        "warnings": [],
+        "reused_checkpoint": false,
+        "safety_checked": false
+      }
+    ],
+    "parameters": {
+      "strength": 0.55,
+      "steps": 40,
+      "part_image_size": 384,
+      "control_scale": 0.7,
+      "guidance": 7.0
+    },
+    "duration_seconds": 80.55,
+    "device": "cuda",
+    "warnings": [],
+    "face": "separate procedural eye and mouth textures",
+    "seed": 42
+  },
+  "description": {
+    "creature": "duck",
+    "shape": "simple rounded silhouette",
+    "eyes": "",
+    "ears": "",
+    "accessories": "",
+    "expression": "",
+    "summary": "",
+    "species": "duck",
+    "species_uncertain": false
+  }
+}

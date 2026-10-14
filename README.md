@@ -1,0 +1,294 @@
+# Draw to Life · mascotas animadas
+
+La nueva etapa convierte dibujos en mascotas 2D de caricatura que **respiran, parpadean y reaccionan al tocarlas**. El catálogo tiene una estructura por animal: perro, gato, pato, cerdo, conejo y oso. Las bases se preparan previamente con IA local; después se recolorean y se corrigen sus piezas manteniendo las uniones y las animaciones.
+
+## Preparar y ejecutar la versión animada
+
+En PowerShell desde la carpeta del proyecto:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\prepare-characters.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
+```
+
+La preparación descarga explícitamente los modelos y crea las seis bases. Puede tardar mucho; no se prometen tiempos en segundos. Si se interrumpe, repetir el comando reutiliza las piezas completadas. Las bases se publican solo cuando el rig y sus texturas están completos. Para ver el estado real:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_characters.py --status
+.\.venv\Scripts\python.exe scripts\prepare_characters.py --animal dog --seed 42
+```
+
+`--force` regenera conservando un backup de la base anterior. Los checkpoints de preparación quedan en `assets/characters/.work/`. Las guías estructurales están definidas en código y **no cuentan como bases generadas**: el catálogo exige texturas producidas por IA y un rig válido.
+
+La UI usa el estilo **Cartoon infantil**. En «Cómo crear tu mascota» podés elegir el modo y corregir el animal detectado:
+
+| Modo | Comportamiento |
+| --- | --- |
+| Automático | Adapta una base preparada cuando reconoce el animal; de lo contrario crea un personaje nuevo. |
+| Adaptar una base | Exige una base disponible; admite seleccionar el animal manualmente. |
+| Crear desde cero | Genera piezas nuevas a partir de la silueta y descripción del dibujo. |
+
+Si la especie es ambigua o está fuera del catálogo se usa generación libre, sin importar la demora. Una base existente dañada produce un error explícito. Un fallo técnico conserva los intermedios y nunca muestra una guía ni el resultado anterior como personaje nuevo.
+
+## Personaje animado y paquete para un juego
+
+La salida principal es un **ZIP de personaje animado**. Los PNG son sus texturas, y la portada estática queda disponible aparte. Extraé el ZIP y abrí `index.html`: la vista previa es autosuficiente y no necesita servidor ni internet.
+
+```text
+character.json          # contrato de personaje, schema_version: 1
+textures/*.png          # capas RGBA del mismo tamaño que el lienzo
+masks/*.png             # máscaras invariables de cada pieza
+guides/*.png            # referencias y guías estructurales
+preview.png             # composición estática transparente
+character-player.js     # reproductor sin dependencias de un motor de juegos
+index.html              # vista animada con texturas embebidas
+```
+
+El contrato incluye tamaño de lienzo, paleta, capas, animaciones y procedencia. Cada capa tiene identificador, padre, pivote `[x,y]` en píxeles del lienzo, ruta relativa de textura, rol de color y movimiento. El orden de las capas define el orden de dibujo. La jerarquía transmite los movimientos del cuerpo a la cabeza y la cara.
+
+Para integrarlo en una página servida localmente:
+
+```javascript
+const pet = await DrawToLifePlayer.load(canvas, './character/character.json');
+pet.react();
+pet.setPaused(true);
+// Al desmontar la vista:
+pet.destroy();
+```
+
+También admite `load(canvas, manifest, assets)`, donde `assets` asigna un data URI por identificador de capa. Emite el evento `character:react`. Soporta pausa, Enter/Espacio, movimiento reducido y páginas ocultas. El formato puede importarse en el futuro juego; esta etapa todavía no implementa voz, alimentación, hambre, monedas ni progreso.
+
+## Generación y parámetros nuevos
+
+El análisis usa OpenCV/Pillow y SmolVLM2 local. La descripción incluye especie normalizada y un indicador explícito de ambigüedad. DreamShaper 8 + ControlNet generan las texturas de cuerpo y cabeza; orejas, alas y cola reutilizan su acabado. La cara mantiene texturas procedimentales separadas para controlar ojos y boca.
+
+La generación no carga ni ejecuta el filtro NSFW de Diffusers, tanto en el catálogo como en adaptaciones, creación libre y modo v1. La validación sigue rechazando imágenes vacías, pesos dañados y rigs incompletos. Los fallos aparecen también en el visor principal.
+
+Durante la adaptación, la difusión trabaja sobre cada pieza y conserva máscaras, pivotes y solapas ocultas. La paleta cambia tono/saturación preservando sombreado y contornos. Se usan hasta tres colores dominantes, sin asignar cada color original a una parte del cuerpo; los faltantes se completan con la paleta configurable. El rig libre separa cuerpo y cabeza de la silueta del dibujo y coloca una cara en una región interior suficiente. Si el contorno impide esa separación, usa una estructura redondeada nueva y genera sus texturas con IA local, registrando la simplificación. Los errores técnicos se informan explícitamente.
+
+| Variable | Default | Uso |
+| --- | --- | --- |
+| `CHARACTER_MODEL_ID` | `Lykon/dreamshaper-8` | Modelo SD 1.5 para bases y correcciones. |
+| `CHARACTER_CATALOG_DIR` | `assets/characters` | Catálogo local. |
+| `PART_IMAGE_SIZE` | `384` | Resolución de difusión de cada pieza, colocada después en su máscara original. |
+| `CATALOG_STEPS` | `40` | Pasos de referencia para creación. |
+| `CATALOG_STRENGTH` | `0.55` | Intensidad de creación del acabado. |
+| `ADAPTATION_STRENGTH` | `0.30` | Intensidad de las correcciones habituales. |
+
+Se conserva cualquier `.env` existente. Los parámetros de modelos, dispositivo, paleta y lienzo de la v1 siguen disponibles. Visión y difusión se cargan por etapas; CUDA conserva offload y reintento en CPU ante fallos recuperables. Una seed no garantiza igualdad entre dispositivos.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\process_image.py test1.png --mode auto --seed 42
+.\.venv\Scripts\python.exe scripts\process_image.py test1.png --mode template --animal dog
+.\.venv\Scripts\python.exe scripts\process_image.py examples\monstruo.png --mode free
+node tests/character-player.test.cjs
+```
+
+La CLI y la UI usan animación por defecto. La API Python conserva compatibilidad: llamadas existentes a `Pipeline.prepare()` sin `mode` usan el flujo v1. Para animación indicar `style="Cartoon infantil"` y `mode="auto"`, `"template"` o `"free"`. Los estilos anteriores siguen disponibles con `mode="legacy"`.
+
+Metadata agrega modo efectivo, base utilizada, modelo/revisión, correcciones por pieza, parámetros efectivos, tiempos y paquete exportado. Los tests con modelos simulados no demuestran calidad visual. Para validar los modelos reales hay que preparar las seis bases, revisar sus movimientos y procesar el perro de `test1.png`, un dibujo coloreado y una criatura fuera del catálogo. Ver `VALIDATION.md` para las comprobaciones realizadas y pendientes.
+
+Referencias: [DreamShaper 8](https://huggingface.co/Lykon/dreamshaper-8), [Img2img y strength](https://huggingface.co/docs/diffusers/v0.34.0/en/using-diffusers/img2img). Modelos y dependencias conservan sus propias licencias.
+
+---
+
+# Documentación de la v1 estática (compatibilidad)
+
+Un prototipo **100% local** que convierte una foto de un dibujo infantil en una mascota 2D. La interfaz muestra la foto, el recorte limpio, el dibujo aislado y el personaje generado.
+
+La primera instalación necesita internet para descargar dependencias y modelos. Después, las imágenes se procesan en tu PC, sin API keys ni servicios de generación externos.
+
+## Instalación en Windows
+
+Requisitos: **Python 3.11 de 64 bits**, driver NVIDIA actualizado y espacio libre para el entorno y los modelos. La configuración está pensada para una GTX 1050 Ti de 4 GB y 32 GB de RAM. Reservá aproximadamente **15–20 GB** entre dependencias, modelos y espacio temporal de instalación. La caché de modelos utiliza C: por defecto, aunque el proyecto esté en E:.
+
+Abrí PowerShell en `E:\signs\drawToLife`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\download-models.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
+```
+
+Los scripts detienen la instalación si un paso falla. Si necesitás indicar Python explícitamente:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 -Python "C:\Users\Adria\AppData\Local\Programs\Python\Python311\python.exe"
+```
+
+La app abre **http://127.0.0.1:7860**. Para cerrarla, presioná `Ctrl+C` en la terminal. No necesitás activar el entorno virtual para usar los scripts.
+
+En esta copia de trabajo, `.env` apunta a `models/` para reutilizar los pesos descargados durante la preparación. En una instalación nueva, `.env.example` utiliza la caché estándar de C:. El script de instalación conserva cualquier `.env` existente.
+
+También podés ejecutar cada paso directamente:
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+Copy-Item .env.example .env
+.\.venv\Scripts\python.exe -m draw_to_life.models download-models
+.\.venv\Scripts\python.exe -m draw_to_life.models doctor
+.\.venv\Scripts\python.exe app.py
+```
+
+No sobrescribas `.env` si ya personalizaste la configuración. PyTorch está fijado a la build **2.7.1 + CUDA 11.8**; no hace falta instalar el CUDA Toolkit por separado. Se incluye torchvision compatible y no se requiere Flash Attention, xFormers ni bitsandbytes.
+
+## Uso
+
+1. Fotografiar un personaje completo, preferentemente de frente, sobre papel claro con buena luz.
+2. Subir JPG, PNG o WebP (hasta 30 MB y 40 megapíxeles).
+3. Elegir **Sticker**, **Cartoon suave** o **Mascota virtual**.
+4. Elegir colores del dibujo o paleta por defecto. Un dibujo monocromático usa automáticamente la paleta por defecto.
+5. Presionar **Dar vida al dibujo** y esperar el progreso. La descripción es completamente automática.
+6. Descargar el PNG o encontrar todos los archivos en `outputs/`.
+
+La lectura visual ocurre en CPU y la generación utiliza GPU con offload a RAM. **No se promete generación en segundos** en una GTX 1050 Ti. Si CUDA no puede completar la generación por memoria o precisión, se reintenta en CPU float32 a la misma resolución; la UI y metadata informan el cambio. El tiempo real depende del dibujo, los parámetros y el equipo.
+
+Si faltan modelos, la app muestra la preparación pendiente y deshabilita la generación. La descarga se puede repetir para completar archivos faltantes. Reiniciá la app tras descargar.
+
+### Dibujos de muestra
+
+`examples/` contiene un conejo coloreado, un gato en lápiz y un monstruito con sombrero. Son **entradas sintéticas de prueba creadas con Pillow**, no personajes generados por IA ni evidencia de calidad del modelo. Se pueden seleccionar desde la interfaz.
+
+Para recrearlos:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\make_examples.py
+```
+
+### Ejecución sin interfaz
+
+```powershell
+.\.venv\Scripts\python.exe scripts\process_image.py examples\conejo.png --mode legacy --style Sticker --seed 42
+.\.venv\Scripts\python.exe scripts\process_image.py examples\gato_lapiz.png --mode legacy --style "Cartoon suave" --default-palette
+```
+
+## Configuración
+
+Copiá `.env.example` a `.env`. No contiene secretos.
+
+| Variable | Default | Uso |
+| --- | --- | --- |
+| `MODEL_CACHE_DIR` | Caché estándar de Hugging Face | Directorio de modelos; por ejemplo `C:/DrawToLife/models`. Cambiarlo requiere descargar en ese directorio. |
+| `OUTPUT_DIR` | `outputs` | Carpeta de resultados; rutas relativas al proyecto. |
+| `DEVICE` | `auto` | `auto`, `cuda` o `cpu`. |
+| `IMAGE_SIZE` | `512` | Resolución cuadrada, múltiplo de 8 entre 256 y 768. |
+| `INFERENCE_STEPS` | `30` | Pasos de referencia; img2img utiliza una fracción según la intensidad. |
+| `IMAGE_STRENGTH` | `0.65` | Cuánto reinterpretar el dibujo; menor conserva más la imagen original. |
+| `CONTROL_SCALE` | `0.7` | Peso de los trazos del dibujo. |
+| `GUIDANCE_SCALE` | `7.0` | Peso del prompt. |
+| `CPU_THREADS` | `4` | Threads de PyTorch; ajustar según CPU. |
+| `PALETTE_PRIMARY` | `#91CDB5` | Color principal por defecto. |
+| `PALETTE_SECONDARY` | `#FFE2A8` | Secundario por defecto. |
+| `PALETTE_ACCENT` | `#F39AA8` | Acento por defecto. |
+| `PORT` | `7860` | Puerto local. |
+
+Los tres colores también se pueden cambiar en la interfaz para cada ejecución. Los códigos HEX son una referencia: el generador recibe nombres de color y una imagen inicial coloreada; no se garantiza reproducción exacta de cada HEX.
+
+Los IDs de los modelos son configurables, pero los reemplazos deben ser compatibles con las mismas clases de Transformers/Diffusers y la disposición de archivos verificada. Esta v1 no es un cargador universal de checkpoints.
+
+## Arquitectura
+
+```text
+Foto → OpenCV/Pillow → recorte, trazos, silueta y colores
+                         ↓
+                  SmolVLM2 en CPU → descripción estructurada
+                         ↓
+       Referencia + trazos + descripción + estilo + paleta
+                         ↓
+        SD 1.5 + ControlNet Scribble → personaje 2D PNG
+                         ↓
+                    Gradio + outputs/
+```
+
+- `processing.py`: corrección EXIF, reducción de tamaño, detección de hoja clara, compensación de iluminación, agrupación de componentes, silueta y colores dominantes. Mantiene trazos y silueta separados para no borrar interiores blancos.
+- `description.py`: **HuggingFaceTB/SmolVLM2-2.2B-Instruct** interpreta rasgos en CPU. Su salida se valida; se reintenta una vez si el JSON es inválido. Una descripción ambigua utiliza un resumen general y registra una advertencia.
+- `generation.py`: **stable-diffusion-v1-5/stable-diffusion-v1-5**, guiado por **lllyasviel/control_v11p_sd15_scribble**. Se usa img2img con la referencia limpia y trazos blancos sobre negro, a 512 × 512. Un prompt breve adaptado al contexto de CLIP expresa el objetivo de la instrucción interna; el prompt efectivo se guarda en metadata.
+- `models.py`: descarga explícita de pesos safetensors y archivos necesarios, verificación de snapshots completos y diagnóstico CUDA con un kernel real.
+- `pipeline.py`: orquestación independiente de la UI y guardado por etapas. Libera el generador antes de cargar visión; el modelo de visión se libera antes de generar.
+- `ui.py`: cuatro vistas, estilos, paleta, progreso y descargas. Cola de una ejecución activa para no competir por VRAM.
+
+La generación nunca descarga modelos automáticamente: usa snapshots y `local_files_only=True`. Telemetría de Hugging Face y Gradio desactivada, fuentes locales y servidor restringido a localhost.
+
+## Estructura
+
+```text
+drawToLife/
+├── app.py
+├── draw_to_life/
+│   ├── config.py
+│   ├── processing.py
+│   ├── description.py
+│   ├── generation.py
+│   ├── models.py
+│   ├── pipeline.py
+│   └── ui.py
+├── examples/
+├── scripts/
+│   ├── install.ps1
+│   ├── download-models.ps1
+│   ├── start.ps1
+│   ├── make_examples.py
+│   └── process_image.py
+├── tests/
+├── outputs/
+├── .env.example
+├── requirements.txt
+└── requirements-dev.txt
+```
+
+## Outputs
+
+Cada ejecución crea una carpeta `outputs/AAAAMMDD_HHMMSS_id/` con timestamp UTC y sufijo único:
+
+```text
+original.jpg              # archivo original sin recomprimir; conserva su extensión
+cropped.png               # recorte preprocesado
+isolated.png              # dibujo RGBA, papel exterior transparente
+generation_reference.png  # referencia centrada y con paleta aplicada
+control_scribble.png      # condición estructural para ControlNet
+final_character.png       # resultado 2D RGB con fondo blanco
+metadata.json
+```
+
+Metadata incluye nombre original, timestamp, colores detectados/aplicados, descripción, estilo, modelos, seed, bbox en coordenadas de la imagen original orientada, parámetros, prompts, dispositivo y duración. Una ejecución fallida registra `status: failed` y conserva los intermedios ya guardados. No produce una mascota de sustitución ni muestra el resultado anterior como nuevo.
+
+## Verificación
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check app.py draw_to_life scripts tests
+.\.venv\Scripts\python.exe -m draw_to_life.models doctor
+```
+
+Los tests verifican aislamiento, partes separadas, colores, paletas, inputs inválidos y el contrato de archivos. Los tests de orquestación simulan los modelos caros; **no demuestran calidad generativa**. Para validar esa calidad, procesá los tres dibujos con los modelos reales, revisá silueta, rasgos, frontalidad y limpieza, y repetí una ejecución sin internet después de descargar los modelos.
+
+Una seed ayuda a reproducir el resultado en el mismo entorno; no garantiza igualdad entre CPU/GPU o versiones distintas.
+
+Ver [VALIDATION.md](VALIDATION.md) para resultados generados, tiempos medidos y límites de las verificaciones realizadas en esta copia.
+
+## Límites de la v1
+
+Soporta animales, monstruitos tiernos y criaturas simples. No incluye animación, juego, humanos realistas, reconocimiento perfecto de accesorios ni identidad constante entre generaciones.
+
+La fidelidad depende de los modelos y del dibujo. La vista frontal se solicita al generador, pero una entrada de perfil extremo puede conservar rasgos de perfil. Sombras fuertes, papel muy arrugado, líneas de cuaderno, varios personajes o contornos muy abiertos pueden dificultar el aislamiento. La silueta aproximada queda señalada cuando corresponde.
+
+## Diagnóstico
+
+- **Modelos ausentes/incompletos:** repetir `download-models.ps1` y comprobar que `MODEL_CACHE_DIR` coincide con la ubicación de descarga.
+- **CUDA no disponible:** revisar el driver y ejecutar `doctor`. `DEVICE=auto` usa CPU si no hay CUDA; `DEVICE=cuda` exige CUDA en la comprobación de la UI.
+- **Instalación de Python desde WSL:** los scripts están destinados a PowerShell nativo en Windows. Si WSL informa `UtilBindVsockAnyPort`, ejecutar la instalación desde Windows evita ese problema de interoperabilidad.
+- **Sin espacio en E:** dejar `MODEL_CACHE_DIR` vacío usa C: por defecto. Evitar copiar también los pesos dentro del proyecto.
+- **Puerto ocupado:** cambiar `PORT` en `.env`.
+- **Dibujo no detectado:** acercar la cámara, encuadrar un solo personaje y mejorar la luz.
+
+## Modelos y licencias
+
+Las dependencias y modelos conservan sus propias licencias. Consultar las fichas oficiales antes de distribuir pesos o publicar un producto:
+
+- [SmolVLM2-2.2B-Instruct](https://huggingface.co/HuggingFaceTB/SmolVLM2-2.2B-Instruct)
+- [Stable Diffusion 1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5)
+- [ControlNet Scribble](https://huggingface.co/lllyasviel/control_v11p_sd15_scribble)
+- [Offloading en Diffusers](https://huggingface.co/docs/diffusers/optimization/memory)
