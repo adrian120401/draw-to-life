@@ -14,9 +14,11 @@ import zipfile
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
+from PIL.PngImagePlugin import PngInfo
 
 from .config import ROOT, valid_hex
 from .character_schema import RigError, validate_manifest
+from .expressions import texture_entries, with_expressions
 
 SPECIES = {"dog": "Perro", "cat": "Gato", "duck": "Pato", "pig": "Cerdo",
            "rabbit": "Conejo", "bear": "Oso"}
@@ -162,7 +164,7 @@ def make_guide(species: str, size: int = 512, palette: list[str] | None = None,
                     "blink": {"duration": .18, "interval": 4.3},
                     "react": {"duration": .85, "jump": .025, "tilt_degrees": 8}},
                 "provenance": {"status": "guide", "note": "Structural input; not AI-generated art."}}
-    return Puppet(manifest, textures)
+    return with_expressions(Puppet(manifest, textures))
 
 
 def free_guide(silhouette: np.ndarray, size: int, palette: list[str], creature: str) -> Puppet:
@@ -214,7 +216,7 @@ def free_guide(silhouette: np.ndarray, size: int, palette: list[str], creature: 
     manifest.update({"id": "custom", "layers": layers,
                      "face_bounds": [cx - radius * .95, cy - radius * .7,
                                      cx + radius * .95, cy + radius * .95]})
-    return Puppet(manifest, textures)
+    return with_expressions(Puppet(manifest, textures))
 
 
 def recolor(texture: Image.Image, color: str) -> Image.Image:
@@ -297,9 +299,9 @@ def load_puppet(directory: Path, *, require_generated: bool = True) -> Puppet:
         if require_generated and (not isinstance(provenance, dict) or provenance.get("status") != "generated"):
             raise RigError("La base todavía no fue generada con IA local.")
         textures = {}
-        for layer in data["layers"]:
-            with Image.open(directory / layer["texture"]) as image:
-                textures[layer["id"]] = image.copy()
+        for key, path in texture_entries(data):
+            with Image.open(directory / path) as image:
+                textures[key] = image.copy()
         return Puppet(data, textures)
     except (OSError, ValueError, KeyError, TypeError) as exc:
         raise RigError(f"Base inválida en {directory.name}: {exc}") from exc
@@ -319,10 +321,16 @@ def catalog_status(directory: Path) -> dict:
 def save_puppet(puppet: Puppet, directory: Path) -> Path:
     validate_manifest(puppet.manifest)
     directory.mkdir(parents=True, exist_ok=True)
-    for layer in puppet.manifest["layers"]:
-        path = directory / layer["texture"]
+    for key, relative in texture_entries(puppet.manifest):
+        path = directory / relative
         path.parent.mkdir(parents=True, exist_ok=True)
-        puppet.textures[layer["id"]].save(path)
+        info = None
+        if "__" in key:
+            info = PngInfo()
+            info.add_text("Description", "Procedural facial expression derived from the character's existing face textures and pivots.")
+            info.add_text("Software", "Draw to Life")
+        puppet.textures[key].save(path, pnginfo=info)
+    for layer in puppet.manifest["layers"]:
         mask_path = directory / "masks" / (layer["id"] + ".png")
         mask_path.parent.mkdir(parents=True, exist_ok=True)
         puppet.textures[layer["id"]].getchannel("A").save(mask_path)

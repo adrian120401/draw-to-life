@@ -1,6 +1,6 @@
 # Draw to Life · mascotas animadas
 
-La nueva etapa convierte dibujos en mascotas 2D de caricatura que **respiran, parpadean y reaccionan al tocarlas**. El catálogo tiene una estructura por animal: perro, gato, pato, cerdo, conejo y oso. Las bases se preparan previamente con IA local; después se recolorean y se corrigen sus piezas manteniendo las uniones y las animaciones.
+La app convierte dibujos en mascotas 2D de caricatura que **respiran, parpadean, comen y reaccionan a los mimos y al juego**. El catálogo tiene una estructura por animal: perro, gato, pato, cerdo, conejo y oso. Las bases se preparan previamente con IA local; después se recolorean y se corrigen sus piezas manteniendo las uniones y las animaciones.
 
 ## Preparar y ejecutar la versión animada
 
@@ -21,7 +21,11 @@ La preparación descarga explícitamente los modelos y crea las seis bases. Pued
 
 `--force` regenera conservando un backup de la base anterior. Los checkpoints de preparación quedan en `assets/characters/.work/`. Las guías estructurales están definidas en código y **no cuentan como bases generadas**: el catálogo exige texturas producidas por IA y un rig válido.
 
-La UI usa el estilo **Cartoon infantil**. En «Cómo crear tu mascota» podés elegir el modo y corregir el animal detectado:
+La interfaz tiene tres pantallas: **subir una foto → analizar/generar → jugar con la mascota**. La generación comienza al subir una imagen válida y abre automáticamente el resultado. Usa **Cartoon infantil**, selección automática de especie y colores del dibujo; las imágenes sin color usan la paleta configurada. El fondo lila y sus formas se adaptan a escritorio y celular.
+
+En la pantalla final, **Comida** acerca una fruta a la boca y activa la masticación; **Mimos** y tocar al personaje provocan una sonrisa, ojos felices y corazones; **Jugar** activa pequeños rebotes y balanceos. La bienvenida mueve cabeza y cuerpo, sin simular brazos inexistentes. Solo hay una interacción activa a la vez. Se puede pausar, crear otro dibujo y guardar el personaje. No hay hambre, monedas, voz ni progreso persistente.
+
+Los modos y la corrección manual del animal siguen disponibles en la CLI y la API Python:
 
 | Modo | Comportamiento |
 | --- | --- |
@@ -45,19 +49,22 @@ character-player.js     # reproductor sin dependencias de un motor de juegos
 index.html              # vista animada con texturas embebidas
 ```
 
-El contrato incluye tamaño de lienzo, paleta, capas, animaciones y procedencia. Cada capa tiene identificador, padre, pivote `[x,y]` en píxeles del lienzo, ruta relativa de textura, rol de color y movimiento. El orden de las capas define el orden de dibujo. La jerarquía transmite los movimientos del cuerpo a la cabeza y la cara.
+El contrato incluye tamaño de lienzo, paleta, capas, animaciones y procedencia. Cada capa tiene identificador, padre, pivote `[x,y]` en píxeles del lienzo, ruta relativa de textura, rol de color y movimiento. Las capas faciales admiten `expressions`, un mapa opcional de nombres (`happy`, `closed`, `open`, `chew`) a rutas PNG relativas, y la boca puede declarar `mouth_anchor: [x, y]`. El orden de las capas define el orden de dibujo. La jerarquía transmite los movimientos del cuerpo a la cabeza y la cara; la comida sigue esa misma transformación.
+
+Se mantiene `schema_version: 1`: el reproductor nuevo carga los paquetes anteriores con sus animaciones básicas, y las variantes opcionales no impiden que el reproductor anterior use la textura de reposo. Al adaptar una base antigua se preparan sus expresiones localmente, sin regenerar su cuerpo ni modificar el catálogo. Los PNG de expresión incluyen su procedencia procedural.
 
 Para integrarlo en una página servida localmente:
 
 ```javascript
 const pet = await DrawToLifePlayer.load(canvas, './character/character.json');
-pet.react();
+pet.feed(); // Devuelve false si otra interacción está activa o está en pausa.
+// Otras acciones, cuando termina la anterior: pet.pet(), pet.play(), pet.react().
 pet.setPaused(true);
 // Al desmontar la vista:
 pet.destroy();
 ```
 
-También admite `load(canvas, manifest, assets)`, donde `assets` asigna un data URI por identificador de capa. Emite el evento `character:react`. Soporta pausa, Enter/Espacio, movimiento reducido y páginas ocultas. El formato puede importarse en el futuro juego; esta etapa todavía no implementa voz, alimentación, hambre, monedas ni progreso.
+También admite `load(canvas, manifest, assets)`, donde `assets` asigna un data URI por identificador de capa y por variante (`mouth__happy`, por ejemplo). Emite `character:react`, `character:actionstart`, `character:actionend` y `character:pause`. Los eventos de acción incluyen `detail.action`; pausa incluye `detail.paused`. Soporta pausa, Enter/Espacio, movimiento reducido y páginas ocultas. Con movimiento reducido las expresiones siguen respondiendo sin saltos ni partículas. El HTML y el ZIP incluyen las mismas interacciones que la app.
 
 ## Generación y parámetros nuevos
 

@@ -1,5 +1,55 @@
 # Verificación de Draw to Life
 
+## Flujo simple e interacciones · 15 de octubre de 2026 (16 de octubre UTC)
+
+La interfaz ahora muestra carga, espera y juego como pantallas separadas. La
+foto inicia la generación automáticamente y el resultado abre el visor sin un
+paso adicional. El visor incluye comida, mimos, juego, expresiones de boca y
+ojos, pausa, teclado y movimiento reducido. Las nuevas variantes son opcionales
+en el contrato v1; se conservan el catálogo existente y la anatomía de cada rig.
+
+- **80 tests Python pasaron** en Python 3.11 de Windows. Cubren el nuevo flujo,
+  retorno a carga ante errores, limpieza y reinicio, variantes faciales,
+  conservación de nariz y arte original, rutas inválidas y exportación completa.
+- **12 tests JavaScript pasaron**: transformaciones heredadas, parpadeo, ciclos,
+  estados de comida, retorno al reposo, posición transformada de la boca,
+  rechazo de acciones superpuestas y feedback con movimiento reducido.
+- **Ruff 0.13.2**, `git diff --check`, compileall, sintaxis JavaScript y `pip check`:
+  sin errores. Diffusers conserva dos avisos de deprecación de NumPy en los
+  tests de scheduler; no provocaron fallos.
+- **Generación real por CLI**, `test1.png`, seed 42: perro reconocido,
+  adaptación de cuerpo y cabeza en la **GTX 1050 Ti de 4 GB**, estado `completed`,
+  **101.20 s** totales y **40.53 s** de difusión. Resultado en
+  `outputs/20261016_024818_2f449f/`, con expresiones y ZIP autosuficiente.
+- **Flujo real en navegador**: subida de `test1.png` → “Mirando tu dibujo…” →
+  “Dándole vida…” → mascota interactiva. Ejecución
+  `outputs/20261016_025158_6a824b/`: **80.68 s** totales, **37.96 s** de difusión,
+  estado `completed`, CUDA. Se comprobaron descarga de `character.zip` y
+  “Otro dibujo”, que elimina el visor y vuelve a la carga.
+- **Playwright / Chromium**, escritorio 1440 × 900 y celular 390 × 844:
+  captura de las tres pantallas, comida, mimos, juego, bloqueo de acciones
+  simultáneas, pausa y continuación. Alimentación y teclado funcionan sin
+  conexión después de cargar el HTML. Con movimiento reducido las matrices
+  corporales permanecen estables y la acción termina liberando sus botones.
+- **Otras anatomías**: alimentación y juego probados en el pato y en un rig
+  libre. La criatura libre de esta comprobación usa una guía estructural para
+  validar movimientos; no se presenta como arte generado por IA.
+- Se probó una imagen PNG inválida desde el navegador: vuelve a la carga con
+  un mensaje breve y sin mostrar un personaje anterior.
+- Revisión independiente de interfaz: **ship**, sin correcciones materiales.
+  Se inspeccionaron las siete capturas de carga, espera, resultado y comida.
+  Una captura de escritorio se repitió después de estabilizar el tamaño del
+  iframe; el botón de pausa quedó visible, sin cambiar el código para la toma.
+
+Las capturas finales de composición reutilizan el personaje de la primera
+generación real en un servidor de prueba, para comprobar los últimos ajustes
+visuales sin repetir inferencia. Ese servidor no forma parte de la app. Las
+capturas están en `output/playwright/` y `.impeccable/review/` (ignoradas por git).
+
+El entorno virtual de Windows se recreó con las dependencias fijadas del
+proyecto. No se modificaron los pesos ni se regeneró el catálogo. Los tiempos
+anteriores son mediciones de estas ejecuciones, no promesas de rendimiento.
+
 ## Filtro retirado y adaptación real · 13 de octubre de 2026 (14 de octubre UTC)
 
 La ejecución `20261014_022828_c04812` reconoció `test1.png` como perro, pero falló por el filtro durante la adaptación, que seguía activo tras preparar el catálogo. A pedido del usuario, la generación ahora carga todos los pipelines con `safety_checker=None`, `feature_extractor=None` y `requires_safety_checker=False`. Se retiró la comprobación NSFW posterior y esos componentes dejaron de ser requisitos del diagnóstico y las descargas. Los archivos ya descargados se conservan. Esta decisión reemplaza la omisión temporal limitada al catálogo descrita más abajo.

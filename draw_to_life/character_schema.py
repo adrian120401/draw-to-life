@@ -3,6 +3,8 @@
 import math
 from pathlib import Path, PureWindowsPath
 
+from .expressions import texture_entries
+
 
 class RigError(ValueError):
     pass
@@ -38,10 +40,22 @@ def validate_manifest(data: dict, directory: Path | None = None) -> None:
         if not isinstance(pivot, list) or len(pivot) != 2 or any(
                 type(v) not in (int, float) or not math.isfinite(v) for v in pivot):
             raise RigError("Pivote inválido.")
-        if not isinstance(layer.get("texture"), str):
+        expressions = layer.get("expressions", {})
+        if not isinstance(expressions, dict) or any(
+                name not in {"happy", "closed", "open", "chew"} for name in expressions):
+            raise RigError("Expresiones de la cara inválidas.")
+        anchor = layer.get("mouth_anchor")
+        if anchor is not None and (not isinstance(anchor, list) or len(anchor) != 2 or any(
+                type(v) not in (int, float) or not math.isfinite(v) for v in anchor)):
+            raise RigError("Posición de la boca inválida.")
+    entries = list(texture_entries(data))
+    if len({key for key, _ in entries}) != len(entries):
+        raise RigError("Las texturas deben tener identificadores únicos.")
+    for _key, texture_path in entries:
+        if not isinstance(texture_path, str):
             raise RigError("Ruta de textura inválida.")
-        path = Path(layer["texture"])
-        windows_path = PureWindowsPath(layer["texture"])
+        path = Path(texture_path)
+        windows_path = PureWindowsPath(texture_path)
         if (path.anchor or windows_path.anchor or ".." in path.parts
                 or ".." in windows_path.parts or path.suffix.lower() != ".png"):
             raise RigError("Ruta de textura inválida.")

@@ -13,3 +13,4 @@ assets/characters/.work/
 assets/characters/*.backup-*/
 .playwright-cli/
 output/playwright/
+.impeccable/review/

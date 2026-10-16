@@ -13,6 +13,7 @@ from PIL import Image, ImageOps
 from .config import Settings
 from .description import CharacterDescription
 from .generation import LocalGenerator
+from .expressions import with_expressions
 from .rig import (Puppet, RigError, SPECIES, apply_palette, layer_reference, load_puppet,
                   make_guide, project_texture, recolor, save_puppet)
 
@@ -202,7 +203,7 @@ class CharacterFactory:
 
     def adapt(self, puppet: Puppet, palette: list[str], paths: dict,
               description: CharacterDescription, seed: int, progress) -> Puppet:
-        adapted = self.generate_parts(apply_palette(puppet, palette), paths, description, seed, progress)
+        adapted = self.generate_parts(apply_palette(with_expressions(puppet), palette), paths, description, seed, progress)
         adapted.manifest["base_id"] = puppet.manifest["id"]
         adapted.manifest["base_provenance"] = puppet.manifest["provenance"]
         return adapted

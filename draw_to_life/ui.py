@@ -1,162 +1,185 @@
-"""Un taller visual sencillo. Sin fuentes remotas, enlaces públicos ni analytics."""
+"""Subir, crear y jugar. El diagnóstico técnico queda en los logs."""
 
 import html
 import logging
+from queue import SimpleQueue
+from threading import Thread
 
 import gradio as gr
 
-from .config import ROOT, Settings
+from .config import Settings
 from .models import diagnose
 from .pipeline import Pipeline
-from .processing import load_image
 from .preview import preview_html
-from .rig import SPECIES, catalog_status
+from .processing import load_image
+from .scene import DECORATIONS, SCENE_CSS, icon
 
-CSS = """
-:root { --ink: #303c38; --paper: #fcf9f2; --mint: #34745d; }
-body, .gradio-container { background: var(--paper) !important; }
-.gradio-container { max-width: 1240px !important; margin: auto !important; }
-#masthead { border-bottom: 1px solid #dfdfd3; padding: 22px 4px 24px; margin-bottom: 20px; }
-#masthead .eyebrow { color: #557261; font: 700 11px 'Trebuchet MS',sans-serif;
-    letter-spacing: 2px; text-transform: uppercase; }
-#masthead h1 { font: 500 clamp(36px,5vw,56px)/1.05 Georgia,serif;
-    color: var(--ink); margin: 12px 0 10px; letter-spacing: -1.6px; }
-#masthead h1 span { color: var(--mint); font-style: italic; }
-#masthead p { color: #52605a; font-size: 16px; max-width: 640px; line-height: 1.6; }
-#process-button { background: #34745d; color: white; min-height: 50px; border: 0; }
-#process-button:hover { background: #285d49; }
-#final-panel { border: 2px solid #a8c9b3 !important; }
-#journey { color: #627066; font-size: 13px; padding: 7px 0 15px; }
-#footer { color: #66716a; font-size: 12px; margin-top: 22px; border-top: 1px solid #dfdfd3; padding-top: 14px; }
-.palette-chip { display: inline-flex; align-items: center; gap: 7px; margin: 4px 12px 4px 0;
-    font: 12px 'Trebuchet MS',sans-serif; color: #36423b; }
-.palette-chip i { display: inline-block; width: 19px; height: 19px; border-radius: 50%; border: 1px solid #aaa; }
-@media(prefers-reduced-motion:reduce) { * { animation: none !important; transition: none !important; } }
+LOGGER = logging.getLogger(__name__)
+
+CSS = SCENE_CSS + """
+body, .gradio-container { background: var(--lilac) !important; }
+.gradio-container { max-width: none !important; padding: 0 !important; }
+.gradio-container footer { display: none !important; }
+.gradio-container > main { padding: 0 !important; max-width: none !important; width: 100% !important; margin: 0 !important; }
+.gradio-container .html-container { padding: 0 !important; }
+#scenery { position: absolute; height: 0; min-height: 0; padding: 0; border: 0; }
+#upload-step, #loading-step { position: relative; min-height: 100svh; justify-content: center;
+    align-items: center; gap: 24px; padding: 28px 20px; background: transparent; }
+#upload-picture { width: 148px; padding: 0; border: 0; overflow: visible !important; background: transparent; }
+.photo-token { display: grid; place-items: center; width: 148px; height: 170px;
+    background: var(--cream); border-radius: 24px; transform: rotate(-8deg);
+    box-shadow: 0 12px 30px #63458113; }
+.photo-token svg { width: 78px; height: 78px; color: #ad89cd; stroke-width: 1.2; }
+#upload-picture svg { color: #ad89cd; }
+#upload-button, #retry-button { width: auto !important; min-width: 224px; flex: none;
+    background: var(--violet); color: white; border: 0; border-radius: 22px;
+    padding: 19px 30px; font: 700 20px 'Trebuchet MS',sans-serif; box-shadow: 0 6px 18px #69418d20; }
+#upload-button:hover, #retry-button:hover { background: #5d3688; }
+#upload-button:disabled { opacity: .55; }
+#retry-button { min-width: 180px; padding: 14px 24px; font-size: 17px; }
+#upload-error { max-width: 360px; border: 0; background: transparent; padding: 0; }
+.upload-error { text-align: center; color: var(--ink); font-size: 16px; line-height: 1.5; }
+#loading-art { border: 0; background: transparent; width: 260px; padding: 0; }
+.creating { text-align: center; color: var(--ink); }
+.creating p { margin: 26px 0 0; font: 700 20px 'Trebuchet MS',sans-serif; }
+.creating-orbit { width: 112px; height: 112px; margin: auto; border-radius: 40% 60% 55% 45%;
+    background: #ccb1ec; display: grid; place-items: center; animation: imagining 3s ease-in-out infinite; }
+.creating-orbit svg { width: 54px; height: 54px; color: #fffaf1; }
+@keyframes imagining { 0%,100% { transform: rotate(-10deg) scale(.94); border-radius: 40% 60% 55% 45%; }
+    50% { transform: rotate(12deg) scale(1.04); border-radius: 60% 40% 45% 55%; } }
+#result-step { position: relative; gap: 0; min-height: 100svh; background: transparent; }
+#final-panel { padding: 0; border: 0; background: transparent; }
+#result-actions { width: min(100%, 420px); align-self: center; justify-content: center; padding: 0 16px 20px; gap: 16px; }
+#result-actions button, #result-actions a { background: transparent; color: var(--ink); border: 0;
+    box-shadow: none; font: 400 14px 'Trebuchet MS',sans-serif; min-width: 120px; min-height: 44px; padding: 12px 8px; }
+#result-actions button:hover, #result-actions a:hover { background: #dbcbed; }
+#setup-notice { max-width: 360px; text-align: center; color: var(--ink); }
+@media(max-width:480px) {
+    #upload-step, #loading-step { gap: 28px; }
+    #result-actions { padding-bottom: 12px; }
+}
 """
 
 
-def palette_html(colors: list[str]) -> str:
-    # Colores provienen de valid_hex/detección; escapar texto igualmente.
-    return "".join(f'<span class="palette-chip"><i style="background:{html.escape(color)}"></i>{html.escape(color)}</span>'
-                   for color in colors)
-
-
 def error_html(message: str) -> str:
-    return ('<div role="alert" style="padding:32px;text-align:center">'
-            '<h3>No se pudo dar vida al dibujo</h3>'
-            f'<p>{html.escape(message)}</p>'
-            '<p>Revisá el mensaje y volvé a intentarlo.</p></div>')
+    return f'<div class="upload-error" role="alert">{html.escape(message)}</div>'
+
+
+def loading_html(message: str) -> str:
+    return ('<div class="creating" role="status" aria-live="polite">'
+            f'<div class="creating-orbit" aria-hidden="true">{icon("heart")}</div>'
+            f'<p>{html.escape(message)}</p></div>')
+
+
+def generation_events(pipeline, run):
+    """Publicar cambios de etapa mientras el pipeline síncrono trabaja.
+
+    Una única thread conserva el orden visión/difusión. Siempre se espera su
+    cierre antes de liberar la cola, incluso si se desconecta el navegador.
+    """
+    events = SimpleQueue()
+
+    def finish():
+        last = None
+
+        def progress(fraction, _message):
+            nonlocal last
+            label = "Mirando tu dibujo…" if fraction < .35 else "Dándole vida…"
+            if label != last:
+                events.put(("phase", label))
+                last = label
+
+        try:
+            pipeline.finish(run, progress)
+            events.put(("done", None))
+        except Exception as exc:
+            events.put(("error", exc))
+
+    worker = Thread(target=finish, name="draw-to-life-generation", daemon=True)
+    worker.start()
+    try:
+        while True:
+            event, value = events.get()
+            if event == "error":
+                raise value
+            if event == "done":
+                break
+            yield value
+    finally:
+        worker.join()
 
 
 def build_ui(settings: Settings) -> gr.Blocks:
     report = diagnose(settings)
     pipeline = Pipeline(settings)
-    cuda_ok = settings.device != "cuda" or report["cuda_available"]
-    catalog = catalog_status(settings.catalog_dir)
-    ready = report["character_ready"] and cuda_ok
-    if ready:
-        gpu = report["gpu"]["name"] if report["gpu"] and settings.device != "cpu" else "CPU · generación lenta"
-        environment = f"**Modelos listos · {gpu}**. Todo el procesamiento se hace en esta PC.\n\n" \
-                      f"**Bases preparadas: {len(catalog['ready'])}/6**. " \
-                      "Para completar el catálogo: `./scripts/prepare-characters.ps1`."
-    else:
-        reason = report["character_error"] or "CUDA no está disponible para DEVICE=cuda."
-        environment = f"**Preparación pendiente.** {reason}\n\nEn PowerShell: `./scripts/download-models.ps1` y luego reiniciá la app."
-    theme = gr.themes.Base(primary_hue="green", neutral_hue="stone",
+    ready = report["character_ready"] and (settings.device != "cuda" or report["cuda_available"])
+    if not ready:
+        LOGGER.warning("Preparación pendiente: %s", report.get("character_error") or "CUDA no disponible")
+    theme = gr.themes.Base(primary_hue="purple", neutral_hue="purple",
                            font=["Trebuchet MS", "sans-serif"], font_mono=["Consolas", "monospace"])
-    with gr.Blocks(title="Draw to Life · Mascotas animadas", theme=theme, css=CSS, analytics_enabled=False) as demo:
-        gr.HTML('<header id="masthead"><div class="eyebrow">Un pequeño taller de imaginación · mascotas animadas</div>'
-                '<h1>Draw to <span>Life.</span></h1>'
-                '<p>Ese personaje que vive en una hoja, ahora tiene un lugar en la pantalla. '
-                'Subí su dibujo y convertí su idea en una mascota que respira, parpadea y te saluda.</p></header>')
-        gr.Markdown(environment)
-        gr.HTML('<div id="journey">01 · Tu dibujo &nbsp; → &nbsp; 02 · Lo entendemos &nbsp; → &nbsp; 03 · Le damos vida</div>')
-        with gr.Row():
-            with gr.Column(scale=5):
-                source = gr.File(label="Subí una foto del dibujo", file_types=[".jpg", ".jpeg", ".png", ".webp"], type="filepath")
-                original = gr.Image(label="01 · Imagen original", interactive=False, height=300, show_download_button=False)
-                with gr.Row():
-                    style = gr.State("Cartoon infantil")
-                    color_mode = gr.Radio(["Colores del dibujo", "Paleta por defecto"], value="Colores del dibujo", label="Colores")
-                with gr.Accordion("Cómo crear tu mascota", open=False):
-                    mode = gr.Dropdown([("Elegir automáticamente", "auto"), ("Adaptar una base", "template"),
-                                        ("Crear desde cero", "free")], value="auto", label="Creación")
-                    animal = gr.Dropdown([("Reconocer el dibujo", "auto"), *[(label, key) for key, label in SPECIES.items()]],
-                                         value="auto", label="Animal")
-                    gr.Markdown("Podés corregir el animal detectado. Si no hay una base adecuada, el modo automático crea una mascota nueva.")
-                with gr.Accordion("Tu paleta por defecto", open=False):
-                    gr.Markdown("Se usa en dibujos sin color o cuando elegís «Paleta por defecto».")
-                    with gr.Row():
-                        primary = gr.ColorPicker(value=settings.palette[0], label="Principal")
-                        secondary = gr.ColorPicker(value=settings.palette[1], label="Secundario")
-                        accent = gr.ColorPicker(value=settings.palette[2], label="Acento")
-                button = gr.Button("Dar vida al dibujo", variant="primary", interactive=ready, elem_id="process-button")
-                gr.Markdown("Un personaje por foto. Papel claro, buena luz y el dibujo completo funcionan mejor.")
-            with gr.Column(scale=6):
-                animated = gr.HTML('<p style="text-align:center;padding:120px 0">Tu mascota aparecerá acá.</p>', elem_id="final-panel")
-                status = gr.Markdown("Esperando tu primer dibujo.")
-                bundle = gr.File(label="Descargar personaje animado · ZIP", interactive=False)
-                with gr.Accordion("Imagen de portada", open=False):
-                    final = gr.Image(label="Vista estática", interactive=False, height=280, format="png")
-                    download = gr.File(label="Descargar portada PNG", interactive=False)
-                with gr.Accordion("Así entendimos tu dibujo", open=False):
-                    description = gr.JSON(label="Descripción automática")
-                    colors = gr.HTML()
-                    metadata = gr.File(label="Metadata de la ejecución", interactive=False)
-        with gr.Accordion("02 · Del papel al personaje", open=False):
-            with gr.Row():
-                cropped = gr.Image(label="Recorte y limpieza", interactive=False, height=280)
-                isolated = gr.Image(label="Dibujo aislado · fondo transparente", interactive=False, height=280, image_mode="RGBA", format="png")
-        examples = sorted((ROOT / "examples").glob("*.png"))
-        if (ROOT / "test1.png").is_file():
-            examples.insert(0, ROOT / "test1.png")
-        if examples:
-            gr.Examples(examples=[[str(path)] for path in examples], inputs=[source], label="Probá con un dibujo de muestra", cache_examples=False)
-        gr.HTML('<div id="footer">100% local después de descargar los modelos · Sin API keys · '
-                'Una interpretación nueva de tu dibujo, hecha con su misma imaginación.</div>')
+    with gr.Blocks(title="Draw to Life", theme=theme, css=CSS, analytics_enabled=False) as demo:
+        gr.HTML(DECORATIONS, elem_id="scenery")
+        phase = gr.State("upload")
+        with gr.Column(elem_id="upload-step") as upload_step:
+            gr.HTML(f'<div class="photo-token" aria-hidden="true">{icon("photo")}</div>', elem_id="upload-picture")
+            source = gr.UploadButton("Subí tu dibujo", file_types=[".jpg", ".jpeg", ".png", ".webp"],
+                                     type="filepath", interactive=ready, elem_id="upload-button")
+            error = gr.HTML("", elem_id="upload-error")
+            retry = gr.Button("Reintentar", visible=False, elem_id="retry-button")
+            if not ready:
+                gr.Markdown("La app necesita prepararse antes de crear tu mascota.", elem_id="setup-notice")
+                with gr.Accordion("Preparar la app", open=False):
+                    gr.Markdown("Ejecutá `scripts/download-models.ps1` y reiniciá la app. "
+                                "Si configuraste CUDA, comprobá que esté disponible.")
+        with gr.Column(visible=False, elem_id="loading-step") as loading_step:
+            loading = gr.HTML(loading_html("Mirando tu dibujo…"), elem_id="loading-art")
+        with gr.Column(visible=False, elem_id="result-step") as result_step:
+            animated = gr.HTML("", elem_id="final-panel")
+            with gr.Row(elem_id="result-actions"):
+                again = gr.Button("Otro dibujo", variant="secondary")
+                download = gr.DownloadButton("Guardar mascota", visible=False, variant="secondary")
 
-        def preview(file):
-            if not file:
-                return None, None, None, None, None, None, None, "", "Esperando tu primer dibujo.", "", None
+        outputs = [upload_step, loading_step, result_step, loading, animated, download, error, retry, phase]
+
+        def screen(step, message="Mirando tu dibujo…", player="", package=None, problem="", can_retry=False):
+            return (gr.update(visible=step == "upload"), gr.update(visible=step == "processing"),
+                    gr.update(visible=step == "result"), loading_html(message), player,
+                    gr.update(value=package, visible=package is not None),
+                    error_html(problem) if problem else "", gr.update(visible=can_retry), step)
+
+        def begin():
+            return screen("processing")
+
+        def process(file):
+            yield screen("processing")
+            if not ready:
+                yield screen("upload", problem="Prepará la app y volvé a intentarlo.")
+                return
             try:
-                image = load_image(file)
-            except ValueError as exc:
-                raise gr.Error(str(exc)) from exc
-            return image, None, None, None, None, None, None, "", "Dibujo cargado. Dale vida a tu mascota.", "", None
-
-        outputs = [cropped, isolated, final, download, metadata, description, colors, status, animated, bundle]
-
-        def process(file, selected_style, selected_colors, p, s, a, selected_mode, selected_animal, progress=gr.Progress()):
-            if not file:
-                raise gr.Error("Primero cargá una foto del dibujo.")
-            # Limpiar el personaje anterior antes de mostrar otro trabajo.
-            yield None, None, None, None, None, None, "", "Preparando tu dibujo…", "", None
-            run = None
+                if not file:
+                    raise ValueError("Primero subí una foto de tu dibujo.")
+                load_image(file)
+            except (ValueError, OSError) as exc:
+                yield screen("upload", problem=str(exc))
+                return
             try:
-                progress(0.03, desc="Separando el dibujo del papel…")
-                run = pipeline.prepare(file, selected_style, selected_colors, [p, s, a], mode=selected_mode, animal=selected_animal)
-                yield (run.drawing.cropped, run.drawing.isolated, None, None,
-                       str(run.directory / "metadata.json"), None, palette_html(run.palette),
-                       "Recorte listo. Estamos entendiendo el dibujo y preparando su mascota…", "", None)
-                result = pipeline.finish(run, lambda fraction, message: progress(fraction, desc=message))
-                warnings = "\n\n" + "\n\n".join(run.metadata["warnings"]) if run.metadata["warnings"] else ""
-                yield (run.drawing.cropped, run.drawing.isolated, str(result), str(result),
-                       str(run.directory / "metadata.json"), run.metadata["description"], palette_html(run.palette),
-                       f"**Tu mascota está lista.** "
-                       f"{'Base adaptada' if run.metadata.get('generation_mode') == 'template' else 'Personaje nuevo'} · "
-                       f"{run.metadata['duration_seconds']:.0f} s.{warnings}",
-                       preview_html(run.puppet), str(run.directory / "character.zip"))
-            except Exception as exc:
-                logging.getLogger(__name__).exception("No se pudo procesar la imagen")
-                if run:
-                    yield (run.drawing.cropped, run.drawing.isolated, None, None,
-                           str(run.directory / "metadata.json"), run.metadata.get("description"),
-                           palette_html(run.palette), f"**No se pudo generar el personaje.** {exc}", error_html(str(exc)), None)
-                else:
-                    yield None, None, None, None, None, None, "", f"**No se pudo procesar la foto.** {exc}", error_html(str(exc)), None
+                run = pipeline.prepare(file, "Cartoon infantil", "Colores del dibujo", list(settings.palette),
+                                       mode="auto", animal="auto")
+                for message in generation_events(pipeline, run):
+                    yield screen("processing", message=message)
+                player = preview_html(run.puppet)
+                yield screen("result", player=player, package=str(run.directory / "character.zip"))
+            except Exception:
+                LOGGER.exception("No se pudo dar vida al dibujo")
+                yield screen("upload", problem="No pudimos darle vida. Probá otra vez o subí otro dibujo.", can_retry=True)
 
-        source.change(preview, [source], [original] + outputs, concurrency_id="drawing", concurrency_limit=1)
-        button.click(process, [source, style, color_mode, primary, secondary, accent, mode, animal], outputs,
-                     concurrency_id="drawing", concurrency_limit=1)
+        def reset():
+            return (*screen("upload"), None)
+
+        for trigger in (source.upload, retry.click):
+            trigger(begin, outputs=outputs, queue=False, show_progress="hidden").then(
+                process, [source], outputs, concurrency_id="drawing", concurrency_limit=1,
+                show_progress="hidden", trigger_mode="once")
+        again.click(reset, outputs=[*outputs, source], queue=False, show_progress="hidden")
     demo.queue(default_concurrency_limit=1, max_size=3, api_open=False)
     return demo

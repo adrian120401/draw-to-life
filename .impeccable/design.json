@@ -1,0 +1,475 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T03:05:03.883Z",
+  "title": "Design System: Draw to Life",
+  "extensions": {
+    "colorMeta": {
+      "lilac": {
+        "role": "neutral",
+        "displayName": "lilac",
+        "tonalRamp": [
+          "oklch(15% 0.0352 303.80)",
+          "oklch(27% 0.0352 303.80)",
+          "oklch(39% 0.0352 303.80)",
+          "oklch(51% 0.0352 303.80)",
+          "oklch(63% 0.0352 303.80)",
+          "oklch(75% 0.0352 303.80)",
+          "oklch(87% 0.0352 303.80)",
+          "oklch(95% 0.0352 303.80)"
+        ]
+      },
+      "violet": {
+        "role": "primary",
+        "displayName": "violet",
+        "tonalRamp": [
+          "oklch(15% 0.1326 302.83)",
+          "oklch(27% 0.1326 302.83)",
+          "oklch(39% 0.1326 302.83)",
+          "oklch(51% 0.1326 302.83)",
+          "oklch(63% 0.1326 302.83)",
+          "oklch(75% 0.1326 302.83)",
+          "oklch(87% 0.1326 302.83)",
+          "oklch(95% 0.1326 302.83)"
+        ]
+      },
+      "violet-hover": {
+        "role": "primary",
+        "displayName": "violet hover",
+        "tonalRamp": [
+          "oklch(15% 0.1332 303.05)",
+          "oklch(27% 0.1332 303.05)",
+          "oklch(39% 0.1332 303.05)",
+          "oklch(51% 0.1332 303.05)",
+          "oklch(63% 0.1332 303.05)",
+          "oklch(75% 0.1332 303.05)",
+          "oklch(87% 0.1332 303.05)",
+          "oklch(95% 0.1332 303.05)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "ink",
+        "tonalRamp": [
+          "oklch(15% 0.0877 302.23)",
+          "oklch(27% 0.0877 302.23)",
+          "oklch(39% 0.0877 302.23)",
+          "oklch(51% 0.0877 302.23)",
+          "oklch(63% 0.0877 302.23)",
+          "oklch(75% 0.0877 302.23)",
+          "oklch(87% 0.0877 302.23)",
+          "oklch(95% 0.0877 302.23)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "cream",
+        "tonalRamp": [
+          "oklch(15% 0.0130 82.40)",
+          "oklch(27% 0.0130 82.40)",
+          "oklch(39% 0.0130 82.40)",
+          "oklch(51% 0.0130 82.40)",
+          "oklch(63% 0.0130 82.40)",
+          "oklch(75% 0.0130 82.40)",
+          "oklch(87% 0.0130 82.40)",
+          "oklch(95% 0.0130 82.40)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "white",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(27% 0.0000 89.88)",
+          "oklch(39% 0.0000 89.88)",
+          "oklch(51% 0.0000 89.88)",
+          "oklch(63% 0.0000 89.88)",
+          "oklch(75% 0.0000 89.88)",
+          "oklch(87% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "stage": {
+        "role": "neutral",
+        "displayName": "stage",
+        "tonalRamp": [
+          "oklch(15% 0.0216 309.56)",
+          "oklch(27% 0.0216 309.56)",
+          "oklch(39% 0.0216 309.56)",
+          "oklch(51% 0.0216 309.56)",
+          "oklch(63% 0.0216 309.56)",
+          "oklch(75% 0.0216 309.56)",
+          "oklch(87% 0.0216 309.56)",
+          "oklch(95% 0.0216 309.56)"
+        ]
+      },
+      "lavender": {
+        "role": "secondary",
+        "displayName": "lavender",
+        "tonalRamp": [
+          "oklch(15% 0.0807 300.94)",
+          "oklch(27% 0.0807 300.94)",
+          "oklch(39% 0.0807 300.94)",
+          "oklch(51% 0.0807 300.94)",
+          "oklch(63% 0.0807 300.94)",
+          "oklch(75% 0.0807 300.94)",
+          "oklch(87% 0.0807 300.94)",
+          "oklch(95% 0.0807 300.94)"
+        ]
+      },
+      "lavender-light": {
+        "role": "secondary",
+        "displayName": "lavender light",
+        "tonalRamp": [
+          "oklch(15% 0.0661 302.82)",
+          "oklch(27% 0.0661 302.82)",
+          "oklch(39% 0.0661 302.82)",
+          "oklch(51% 0.0661 302.82)",
+          "oklch(63% 0.0661 302.82)",
+          "oklch(75% 0.0661 302.82)",
+          "oklch(87% 0.0661 302.82)",
+          "oklch(95% 0.0661 302.82)"
+        ]
+      },
+      "lavender-deep": {
+        "role": "secondary",
+        "displayName": "lavender deep",
+        "tonalRamp": [
+          "oklch(15% 0.0787 303.25)",
+          "oklch(27% 0.0787 303.25)",
+          "oklch(39% 0.0787 303.25)",
+          "oklch(51% 0.0787 303.25)",
+          "oklch(63% 0.0787 303.25)",
+          "oklch(75% 0.0787 303.25)",
+          "oklch(87% 0.0787 303.25)",
+          "oklch(95% 0.0787 303.25)"
+        ]
+      },
+      "dot-purple": {
+        "role": "secondary",
+        "displayName": "dot purple",
+        "tonalRamp": [
+          "oklch(15% 0.0966 303.85)",
+          "oklch(27% 0.0966 303.85)",
+          "oklch(39% 0.0966 303.85)",
+          "oklch(51% 0.0966 303.85)",
+          "oklch(63% 0.0966 303.85)",
+          "oklch(75% 0.0966 303.85)",
+          "oklch(87% 0.0966 303.85)",
+          "oklch(95% 0.0966 303.85)"
+        ]
+      },
+      "pink": {
+        "role": "secondary",
+        "displayName": "pink",
+        "tonalRamp": [
+          "oklch(15% 0.0863 353.61)",
+          "oklch(27% 0.0863 353.61)",
+          "oklch(39% 0.0863 353.61)",
+          "oklch(51% 0.0863 353.61)",
+          "oklch(63% 0.0863 353.61)",
+          "oklch(75% 0.0863 353.61)",
+          "oklch(87% 0.0863 353.61)",
+          "oklch(95% 0.0863 353.61)"
+        ]
+      },
+      "butter": {
+        "role": "secondary",
+        "displayName": "butter",
+        "tonalRamp": [
+          "oklch(15% 0.0999 87.89)",
+          "oklch(27% 0.0999 87.89)",
+          "oklch(39% 0.0999 87.89)",
+          "oklch(51% 0.0999 87.89)",
+          "oklch(63% 0.0999 87.89)",
+          "oklch(75% 0.0999 87.89)",
+          "oklch(87% 0.0999 87.89)",
+          "oklch(95% 0.0999 87.89)"
+        ]
+      },
+      "food": {
+        "role": "secondary",
+        "displayName": "food",
+        "tonalRamp": [
+          "oklch(15% 0.0719 86.06)",
+          "oklch(27% 0.0719 86.06)",
+          "oklch(39% 0.0719 86.06)",
+          "oklch(51% 0.0719 86.06)",
+          "oklch(63% 0.0719 86.06)",
+          "oklch(75% 0.0719 86.06)",
+          "oklch(87% 0.0719 86.06)",
+          "oklch(95% 0.0719 86.06)"
+        ]
+      },
+      "food-ink": {
+        "role": "secondary",
+        "displayName": "food ink",
+        "tonalRamp": [
+          "oklch(15% 0.0859 59.54)",
+          "oklch(27% 0.0859 59.54)",
+          "oklch(39% 0.0859 59.54)",
+          "oklch(51% 0.0859 59.54)",
+          "oklch(63% 0.0859 59.54)",
+          "oklch(75% 0.0859 59.54)",
+          "oklch(87% 0.0859 59.54)",
+          "oklch(95% 0.0859 59.54)"
+        ]
+      },
+      "affection": {
+        "role": "secondary",
+        "displayName": "affection",
+        "tonalRamp": [
+          "oklch(15% 0.0515 349.95)",
+          "oklch(27% 0.0515 349.95)",
+          "oklch(39% 0.0515 349.95)",
+          "oklch(51% 0.0515 349.95)",
+          "oklch(63% 0.0515 349.95)",
+          "oklch(75% 0.0515 349.95)",
+          "oklch(87% 0.0515 349.95)",
+          "oklch(95% 0.0515 349.95)"
+        ]
+      },
+      "affection-ink": {
+        "role": "secondary",
+        "displayName": "affection ink",
+        "tonalRamp": [
+          "oklch(15% 0.1273 351.36)",
+          "oklch(27% 0.1273 351.36)",
+          "oklch(39% 0.1273 351.36)",
+          "oklch(51% 0.1273 351.36)",
+          "oklch(63% 0.1273 351.36)",
+          "oklch(75% 0.1273 351.36)",
+          "oklch(87% 0.1273 351.36)",
+          "oklch(95% 0.1273 351.36)"
+        ]
+      },
+      "play": {
+        "role": "secondary",
+        "displayName": "play",
+        "tonalRamp": [
+          "oklch(15% 0.0325 164.17)",
+          "oklch(27% 0.0325 164.17)",
+          "oklch(39% 0.0325 164.17)",
+          "oklch(51% 0.0325 164.17)",
+          "oklch(63% 0.0325 164.17)",
+          "oklch(75% 0.0325 164.17)",
+          "oklch(87% 0.0325 164.17)",
+          "oklch(95% 0.0325 164.17)"
+        ]
+      },
+      "play-ink": {
+        "role": "secondary",
+        "displayName": "play ink",
+        "tonalRamp": [
+          "oklch(15% 0.0719 166.56)",
+          "oklch(27% 0.0719 166.56)",
+          "oklch(39% 0.0719 166.56)",
+          "oklch(51% 0.0719 166.56)",
+          "oklch(63% 0.0719 166.56)",
+          "oklch(75% 0.0719 166.56)",
+          "oklch(87% 0.0719 166.56)",
+          "oklch(95% 0.0719 166.56)"
+        ]
+      },
+      "orbit": {
+        "role": "secondary",
+        "displayName": "orbit",
+        "tonalRamp": [
+          "oklch(15% 0.0866 305.38)",
+          "oklch(27% 0.0866 305.38)",
+          "oklch(39% 0.0866 305.38)",
+          "oklch(51% 0.0866 305.38)",
+          "oklch(63% 0.0866 305.38)",
+          "oklch(75% 0.0866 305.38)",
+          "oklch(87% 0.0866 305.38)",
+          "oklch(95% 0.0866 305.38)"
+        ]
+      },
+      "utility-hover": {
+        "role": "neutral",
+        "displayName": "utility hover",
+        "tonalRamp": [
+          "oklch(15% 0.0494 306.58)",
+          "oklch(27% 0.0494 306.58)",
+          "oklch(39% 0.0494 306.58)",
+          "oklch(51% 0.0494 306.58)",
+          "oklch(63% 0.0494 306.58)",
+          "oklch(75% 0.0494 306.58)",
+          "oklch(87% 0.0494 306.58)",
+          "oklch(95% 0.0494 306.58)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "action": {
+        "displayName": "action",
+        "purpose": "Upload and processing status."
+      },
+      "retry": {
+        "displayName": "retry",
+        "purpose": "Recovery action."
+      },
+      "body": {
+        "displayName": "body",
+        "purpose": "Short centered errors."
+      },
+      "label": {
+        "displayName": "label",
+        "purpose": "Play tile labels; 13px on mobile."
+      },
+      "utility": {
+        "displayName": "utility",
+        "purpose": "Restart and download."
+      }
+    },
+    "shadows": [
+      {
+        "name": "photo",
+        "value": "0 12px 30px #63458113",
+        "purpose": "Diffuse photo token lift."
+      },
+      {
+        "name": "primary",
+        "value": "0 6px 18px #69418d20",
+        "purpose": "Primary action lift."
+      },
+      {
+        "name": "tile",
+        "value": "0 5px 14px #60408012",
+        "purpose": "Soft play tile lift."
+      }
+    ],
+    "motion": [
+      {
+        "name": "tile-transition",
+        "value": ".18s ease-out",
+        "purpose": "Hover and press feedback."
+      },
+      {
+        "name": "processing-loop",
+        "value": "3s ease-in-out infinite",
+        "purpose": "Gentle loop removed under reduced motion."
+      },
+      {
+        "name": "feed",
+        "value": "3.6s",
+        "purpose": "Food reaction."
+      },
+      {
+        "name": "affection",
+        "value": "2.2s",
+        "purpose": "Affection reaction."
+      },
+      {
+        "name": "play",
+        "value": "2.8s",
+        "purpose": "Play reaction."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "480px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Subí tu dibujo",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid violet upload or recovery action.",
+      "html": "<button class=\"ds-button-primary\">Subí tu dibujo</button>",
+      "css": ".ds-button-primary{background:var(--violet,#6c4699);color:white;border:0;border-radius:22px;padding:19px 30px;min-width:224px;font:700 20px \"Trebuchet MS\",sans-serif;box-shadow:0 6px 18px #69418d20;cursor:pointer}.ds-button-primary:hover{background:#5d3688}.ds-button-primary:disabled{opacity:.55}.ds-button-primary:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Reintentar",
+      "kind": "button",
+      "refersTo": "button-retry",
+      "description": "Solid violet upload or recovery action.",
+      "html": "<button class=\"ds-button-retry\">Reintentar</button>",
+      "css": ".ds-button-retry{background:var(--violet,#6c4699);color:white;border:0;border-radius:22px;padding:14px 24px;min-width:180px;font:700 17px \"Trebuchet MS\",sans-serif;box-shadow:0 6px 18px #69418d20;cursor:pointer}.ds-button-retry:hover{background:#5d3688}.ds-button-retry:disabled{opacity:.55}.ds-button-retry:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-utility",
+      "description": "Quiet restart and download treatment.",
+      "html": "<button class=\"ds-utility\">Otro dibujo</button>",
+      "css": ".ds-utility{background:transparent;color:var(--ink,#493366);border:0;box-shadow:none;font:400 14px \"Trebuchet MS\",sans-serif;min-width:120px;min-height:44px;padding:12px 8px;cursor:pointer}.ds-utility:hover{background:#dbcbed}.ds-utility:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Comida",
+      "kind": "button",
+      "refersTo": "action-food",
+      "description": "Labeled pastel interaction tile.",
+      "html": "<button class=\"ds-action-food\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 7c-7-4-11 3-7 10 2 4 4 3 7 3s5 1 7-3c4-7 0-14-7-10Z\"/><path d=\"M12 7V3m0 3c0-4 4-4 5-3-1 3-3 3-5 3Z\"/></svg></span><span>Comida</span></button>",
+      "css": ".ds-action-food{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-food .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#fbe3af;color:#805026;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-food svg{width:31px;height:31px}.ds-action-food:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-food:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-food:disabled{opacity:.55;cursor:default}.ds-action-food[aria-pressed=\"true\"]{opacity:1}.ds-action-food:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-food{font-size:13px}.ds-action-food .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-food .ds-tile{transition:none}}"
+    },
+    {
+      "name": "Mimos",
+      "kind": "button",
+      "refersTo": "action-affection",
+      "description": "Labeled pastel interaction tile.",
+      "html": "<button class=\"ds-action-affection\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 9 8 15 7-6 12-11 8-15Z\"/></svg></span><span>Mimos</span></button>",
+      "css": ".ds-action-affection{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-affection .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#f7cee0;color:#933c68;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-affection svg{width:31px;height:31px}.ds-action-affection:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-affection:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-affection:disabled{opacity:.55;cursor:default}.ds-action-affection[aria-pressed=\"true\"]{opacity:1}.ds-action-affection:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-affection{font-size:13px}.ds-action-affection .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-affection .ds-tile{transition:none}}"
+    },
+    {
+      "name": "Jugar",
+      "kind": "button",
+      "refersTo": "action-play",
+      "description": "Labeled pastel interaction tile.",
+      "html": "<button class=\"ds-action-play\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 5c2 4 6 8 12 12M4 13c5-3 10-3 16-2M13 3c-3 5-3 11-1 18\"/></svg></span><span>Jugar</span></button>",
+      "css": ".ds-action-play{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-play .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#cfe9dc;color:#316c56;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-play svg{width:31px;height:31px}.ds-action-play:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-play:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-play:disabled{opacity:.55;cursor:default}.ds-action-play[aria-pressed=\"true\"]{opacity:1}.ds-action-play:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-play{font-size:13px}.ds-action-play .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-play .ds-tile{transition:none}}"
+    },
+    {
+      "name": "Pause",
+      "kind": "button",
+      "refersTo": "button-pause",
+      "description": "Circular control at the stage’s upper right.",
+      "html": "<button class=\"ds-pause\" aria-label=\"Pausar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 5v14M16 5v14\"/></svg></button>",
+      "css": ".ds-pause{background:var(--cream,#fffaf1);color:var(--ink,#493366);border:0;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;cursor:pointer}.ds-pause svg{width:20px;height:20px}.ds-pause:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Photo token",
+      "kind": "custom",
+      "refersTo": "photo-token",
+      "description": "Decorative cream object above upload.",
+      "html": "<div class=\"ds-photo\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"4\"/><circle cx=\"8.5\" cy=\"8.5\" r=\"1.5\"/><path d=\"m3 17 5-5 4 4 4-6 5 7\"/></svg></div>",
+      "css": ".ds-photo{display:grid;place-items:center;width:148px;height:170px;background:var(--cream,#fffaf1);border-radius:24px;transform:rotate(-8deg);box-shadow:0 12px 30px #63458113}.ds-photo svg{width:78px;height:78px;color:#ad89cd;stroke-width:1.2}"
+    },
+    {
+      "name": "Processing orbit",
+      "kind": "custom",
+      "refersTo": "creating-orbit",
+      "description": "Soft animated object with actual pipeline status.",
+      "html": "<div class=\"ds-creating\" role=\"status\"><div class=\"ds-orbit\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 9 8 15 7-6 12-11 8-15Z\"/></svg></div><p>Mirando tu dibujo…</p></div>",
+      "css": ".ds-creating{text-align:center;color:var(--ink,#493366)}.ds-creating p{margin:26px 0 0;font:700 20px \"Trebuchet MS\",sans-serif}.ds-orbit{width:112px;height:112px;margin:auto;border-radius:40% 60% 55% 45%;background:#ccb1ec;display:grid;place-items:center;animation:ds-imagining 3s ease-in-out infinite}.ds-orbit svg{width:54px;height:54px;color:#fffaf1}@keyframes ds-imagining{0%,100%{transform:rotate(-10deg) scale(.94);border-radius:40% 60% 55% 45%}50%{transform:rotate(12deg) scale(1.04);border-radius:60% 40% 45% 55%}}@media(prefers-reduced-motion:reduce){.ds-orbit{animation:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lilac Playroom",
+    "overview": "A spacious, playful world where the drawing is the main event. Pale lilac fills the viewport; soft lavender shapes, pink circles and butter stars gather at its edges. Cream objects and rounded controls feel approachable without competing with the character.\n\nThe interface uses local Trebuchet typography, minimal Rioplatense Spanish and recognizable outline drawings. Movement gives the existing character affection and personality while preserving its anatomy.",
+    "keyCharacteristics": [
+      "Open lilac space with peripheral geometric decoration.",
+      "Soft cream objects and violet primary actions.",
+      "Large character imagery, short labels and gentle reactions."
+    ],
+    "rules": [
+      {
+        "name": "The Quiet Center Rule",
+        "body": "Decorative geometry frames the edges and leaves the central subject legible.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do keep pastel edge decoration behind the central drawing and controls.",
+      "Do pair play icons with short visible labels and preserve clear keyboard focus.",
+      "Do honor reduced motion and animate only the character anatomy already present."
+    ],
+    "donts": [
+      "Don't replace the playful lilac world with a dashboard or technical workbench.",
+      "Don't add hard offset shadows or substitute text glyphs for the outline icons.",
+      "Don't introduce display typography absent from the current action-led hierarchy."
+    ]
+  }
+}
