@@ -11,7 +11,33 @@ ICONS = {
     "play": '<circle cx="12" cy="12" r="9"/><path d="M7 5c2 4 6 8 12 12M4 13c5-3 10-3 16-2M13 3c-3 5-3 11-1 18"/>',
     "pause": '<path d="M8 5v14M16 5v14"/>',
     "resume": '<path d="m9 5 10 7-10 7Z"/>',
+    "sound": '<path d="m11 4-5 4H3v8h3l5 4Z"/><path d="M15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/>',
+    "mute": '<path d="m11 4-5 4H3v8h3l5 4Z"/><path d="m16 9 5 6m0-6-5 6"/>',
+    "close": '<path d="m6 6 12 12M18 6 6 18"/>',
 }
+
+TOY_FOOD = '''<svg viewBox="0 0 80 80" aria-hidden="true">
+<ellipse cx="40" cy="68" rx="27" ry="5" fill="#63419b15"/>
+<path d="M40 22C12 7 8 36 20 56c7 12 14 7 20 7s13 5 20-7C72 36 68 7 40 22Z" fill="#F07D91" stroke="#BC5676" stroke-width="2"/>
+<path d="m40 24 2-14" stroke="#76513F" stroke-width="4" stroke-linecap="round"/>
+<path d="M42 15c0-12 16-12 18-8-4 9-10 10-18 8Z" fill="#69AF87"/>
+<path d="M23 30c-3 4-3 8-2 12" stroke="#FFE0E6" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>'''
+TOY_BALL = '''<svg viewBox="0 0 80 80" aria-hidden="true">
+<ellipse cx="40" cy="68" rx="27" ry="5" fill="#63419b15"/>
+<circle cx="40" cy="36" r="28" fill="#7CC8A9" stroke="#376D5C" stroke-width="2"/>
+<circle cx="40" cy="36" r="13" fill="none" stroke="#376D5C" stroke-width="2"/>
+<path d="m40 8 0 15m-24 27 13-7m35 7-13-7" stroke="#376D5C" stroke-width="2"/>
+<path d="M23 23c3-4 6-6 11-7" stroke="#C9F0DF" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>'''
+TOY_BUBBLES = '''<svg viewBox="0 0 80 80" aria-hidden="true">
+<ellipse cx="40" cy="68" rx="27" ry="5" fill="#63419b15"/>
+<path d="m24 60 14-23" stroke="#6c4699" stroke-width="8" stroke-linecap="round"/>
+<circle cx="42" cy="29" r="16" fill="none" stroke="#6c4699" stroke-width="5"/>
+<circle cx="63" cy="13" r="10" fill="#C7B3EB33" stroke="#6c4699" stroke-width="2"/>
+<circle cx="16" cy="23" r="7" fill="#F1ADC833" stroke="#BC5676" stroke-width="2"/>
+<path d="M59 8c1-1 3-2 5-2M38 19c3-2 6-2 8-1" stroke="#fffaf1" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>'''
 
 
 def icon(name: str) -> str:

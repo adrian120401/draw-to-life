@@ -23,7 +23,21 @@ La preparación descarga explícitamente los modelos y crea las seis bases. Pued
 
 La interfaz tiene tres pantallas: **subir una foto → analizar/generar → jugar con la mascota**. La generación comienza al subir una imagen válida y abre automáticamente el resultado. Usa **Cartoon infantil**, selección automática de especie y colores del dibujo; las imágenes sin color usan la paleta configurada. El fondo lila y sus formas se adaptan a escritorio y celular.
 
-En la pantalla final, **Comida** acerca una fruta a la boca y activa la masticación; **Mimos** y tocar al personaje provocan una sonrisa, ojos felices y corazones; **Jugar** activa pequeños rebotes y balanceos. La bienvenida mueve cabeza y cuerpo, sin simular brazos inexistentes. Solo hay una interacción activa a la vez. Se puede pausar, crear otro dibujo y guardar el personaje. No hay hambre, monedas, voz ni progreso persistente.
+La pantalla final es una escena táctil: arrastrá la **fruta hasta la boca**, acariciá la cabeza, frotá la pancita para hacer cosquillas o lanzá la **pelota** para que la mascota la persiga y la empuje. También podés tocar los juguetes. La bienvenida dura alrededor de un segundo; la mirada, el parpadeo y las reacciones mantienen vivo al personaje sin agregar brazos. Las respuestas se combinan: podés dar mimos y jugar mientras come. Hay sonidos cortos, un control para silenciarlos y pausa. Se puede crear otro dibujo y guardar el paquete portable; no hay hambre, monedas, voz ni progreso persistente.
+
+Cuando la pelota está en juego, su control cambia a **Guardar**: tocarlo o devolver la pelota arrastrándola a su lugar termina la persecución y la mascota vuelve al centro. Con teclado, el mismo botón alterna entre lanzar y guardar; `pet.toggleBall()` permite esa alternancia desde código, mientras `pet.play()` conserva su comportamiento de lanzamiento.
+
+**Burbujas** abre una ronda de cinco aciertos: tocá las burbujas para que la mascota reaccione, reventá la última burbuja dorada y festejá con tres saltitos y confeti. Cinco puntos muestran el avance. La ronda no tiene cuenta regresiva ni derrota; al terminar podés repetir o volver, y la cruz permite salir en cualquier momento. Al entrar se guarda la pelota. Pausa y mute siguen disponibles. Con teclado, usá Tab y Enter para elegir/reventar burbujas, o Escape para salir; con movimiento reducido quedan quietas y la celebración conserva la expresión sin saltos ni confeti. También funciona sin conexión en el paquete descargado. Desde código están disponibles `pet.startBubbles()`, `pet.popBubble(id)` y `pet.stopBubbles()`.
+
+Para usarla desde un teléfono conectado a la misma Wi-Fi que la PC:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1 -Lan
+```
+
+La terminal muestra la URL de la PC para abrirla en el teléfono. La PC debe permanecer encendida y Windows debe permitir Python en la red privada. Sin `-Lan` sigue disponible solo en la PC. También podés ejecutar `python app.py --lan` desde el entorno instalado.
+
+**Sacar foto** abre el selector de cámara nativo con preferencia por la cámara trasera; **Subí tu dibujo** conserva la galería. El comportamiento exacto del selector depende del navegador del teléfono. Se admiten JPG, PNG, WebP, HEIC y HEIF, con orientación EXIF corregida y los mismos límites de 30 MB y 40 megapíxeles. No hace falta mantener una cámara en vivo ni usar `getUserMedia`.
 
 Los modos y la corrección manual del animal siguen disponibles en la CLI y la API Python:
 
@@ -57,14 +71,16 @@ Para integrarlo en una página servida localmente:
 
 ```javascript
 const pet = await DrawToLifePlayer.load(canvas, './character/character.json');
-pet.feed(); // Devuelve false si otra interacción está activa o está en pausa.
-// Otras acciones, cuando termina la anterior: pet.pet(), pet.play(), pet.react().
+pet.feed(); // false si esta fruta ya se está comiendo o el juego está en pausa.
+pet.pet(); // Los mimos se combinan con la comida.
+pet.play(); // Lanza la pelota; pet.play(-1) cambia la dirección.
+pet.setMuted(true);
 pet.setPaused(true);
 // Al desmontar la vista:
 pet.destroy();
 ```
 
-También admite `load(canvas, manifest, assets)`, donde `assets` asigna un data URI por identificador de capa y por variante (`mouth__happy`, por ejemplo). Emite `character:react`, `character:actionstart`, `character:actionend` y `character:pause`. Los eventos de acción incluyen `detail.action`; pausa incluye `detail.paused`. Soporta pausa, Enter/Espacio, movimiento reducido y páginas ocultas. Con movimiento reducido las expresiones siguen respondiendo sin saltos ni partículas. El HTML y el ZIP incluyen las mismas interacciones que la app.
+También admite `load(canvas, manifest, assets)`, donde `assets` asigna un data URI por identificador de capa y por variante (`mouth__happy`, por ejemplo). Emite `character:react`, `character:actionstart`, `character:actionend`, `character:interaction`, `character:mute` y `character:pause`. Los eventos de acción incluyen `detail.action`; pausa incluye `detail.paused`. Enter/Espacio dan mimos y las flechas lanzan la pelota. Los juguetes son botones accesibles por teclado. Pausar congela la escena; ocultar la página cancela gestos y sonidos. Con movimiento reducido las expresiones responden sin saltos, persecución ni partículas. El HTML y el ZIP incluyen las mismas interacciones que la app y no necesitan conexión.
 
 ## Generación y parámetros nuevos
 

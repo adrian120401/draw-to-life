@@ -8,7 +8,6 @@ from copy import deepcopy
 from dataclasses import dataclass
 import json
 from pathlib import Path
-import shutil
 import zipfile
 
 import cv2
@@ -32,6 +31,12 @@ DEFAULT_PALETTES = {
     "unknown": ["#91CDB5", "#FFE2A8", "#F39AA8"],
 }
 RUNTIME = ROOT / "draw_to_life" / "web" / "character-player.js"
+
+
+def player_source() -> str:
+    """Empaquetar física, audio y renderer en un único archivo portátil."""
+    return ((RUNTIME.parent / "pet-scene.js").read_text(encoding="utf-8")
+            + "\n" + RUNTIME.read_text(encoding="utf-8"))
 
 
 @dataclass
@@ -351,7 +356,7 @@ def save_puppet(puppet: Puppet, directory: Path) -> Path:
 
 def export_package(puppet: Puppet, directory: Path) -> Path:
     save_puppet(puppet, directory)
-    shutil.copyfile(RUNTIME, directory / "character-player.js")
+    (directory / "character-player.js").write_text(player_source(), encoding="utf-8")
     from .preview import preview_document
     preview = preview_document(puppet)
     (directory / "index.html").write_text(preview, encoding="utf-8")

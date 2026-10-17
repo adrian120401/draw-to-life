@@ -1,5 +1,124 @@
 # Verificación de Draw to Life
 
+## Minijuego de burbujas · 16 de octubre de 2026 (17 de octubre UTC)
+
+Nuevo juguete Burbujas: cinco aciertos, hasta tres objetivos simultáneos,
+última burbuja dorada y celebración de 2.4 segundos con tres saltos y un máximo
+de 48 piezas de confeti. Cinco puntos indican el avance. No hay cuenta atrás
+ni derrota; se puede salir siempre, repetir o volver al juego libre.
+
+- **27 tests JavaScript** pasaron: cinco aciertos únicos, ids viejos/dobles
+  ignorados, final dorado y celebración única, limpieza de partículas,
+  repetición/salida, escenas largas acotadas, movimiento reducido y guardas
+  de pausa/destrucción. Se mantienen las regresiones de guardar la pelota.
+- Corregida la continuidad de una burbuja sin tocar durante más de diez
+  segundos: el reinicio del tiempo producía un salto de **41.57px** en 2ms;
+  ahora recorre **0.027px** en ese mismo intervalo. La regresión de continuidad
+  falló antes de quitar el reinicio y pasa con la deriva sinusoidal continua.
+- **17 tests Python** del flujo UI, expresiones y paquete portable pasaron;
+  la exportación comprueba los controles nuevos. Ruff, sintaxis JavaScript
+  y `git diff --check` sin errores.
+- **Chromium en 1440 × 900 y 390 × 844**: completar cinco aciertos con ratón,
+  toques CDP y teclado, foco conservado y transferido al repetir, salida con
+  cruz/Volver/Escape, pausa que congela el reloj y deshabilita objetivos,
+  repetición desde cero y pelota que sigue pudiéndose guardar.
+- Con movimiento reducido las burbujas permanecen quietas y se puede ganar
+  sin saltos ni confeti. HTML recién exportado abierto desde `file://` y
+  juego comprobado sin conexión.
+- **Flujo completo real en la app por LAN**: subida de `test1.png`, generación
+  CUDA y entrada automática al resultado; cinco aciertos y vuelta al juego
+  libre dentro del iframe de Gradio a 390 × 844, sin desborde. Ejecución
+  `outputs/20261017_012924_a65f9d/`: `completed`, **81.32 s** totales y
+  **37.11 s** de difusión. Esta ejecución valida integración, además de las
+  capturas del visor independiente descritas abajo.
+- Muestra orientativa de escritorio: **91 renders / 1.5 segundos**, media
+  **0.17 ms**, p95 **0.30 ms** dentro de `render()`, incluidos los objetivos
+  DOM. No mide toda la composición ni representa rendimiento físico móvil.
+  Objetivos medidos a 390px: **52 × 52px**, por encima del mínimo de 44px.
+- Detector ejecutado una vez: aviso previo de color `#3e2757`; dos avisos
+  nuevos de tamaño/radio se corrigieron usando los pasos existentes 20/22px.
+  Capturas finales en `.impeccable/review/bubbles-*.png`, realizadas con un
+  perro real generado previamente y el HTML nuevo, sin repetir la inferencia
+  para estas capturas. No se presenta el viewport ni CDP como teléfono físico.
+- Revisión independiente: composición y juego aprobados; continuidad de la
+  deriva corregida y verificada. La última corrección fue sincronizar el
+  sidecar de diseño; el revisor la puntuó como resuelta y devolvió **ship**
+  para esa corrección. Ambos documentos de diseño quedaron actualizados.
+
+## Corrección de pelota permanente · 16 de octubre de 2026
+
+Reproducido: la pelota seguía activa tras 60 segundos y tocar de nuevo su
+control solo volvía a lanzarla. No existía una salida del juego desde la UI.
+Ahora ese control alterna entre Pelota y Guardar; también se puede arrastrar
+la pelota a su lugar. Guardarla detiene la persecución, termina la reacción
+de juego y deja que la mascota vuelva al centro, conservando una comida activa.
+
+- **20 tests JavaScript** pasaron, incluidas dos regresiones que fallaban
+  antes del cambio: guardar desde el control y devolver la pelota al lugar.
+- **17 tests Python** del flujo UI, expresiones y exportación pasaron.
+- **Chromium, 1440 × 900 y 390 × 844**: lanzar/guardar con ratón, teclado
+  y toque CDP; arrastrar para lanzar sigue funcionando; recoger la pelota
+  en vivo y devolverla; vuelta al centro y alimentación concurrente.
+- HTML recién exportado probado desde `file://`. Detector de diseño sin
+  hallazgos en los tres archivos modificados. Capturas `ball-*-desktop.png`
+  y `ball-*-mobile.png` en `.impeccable/review/tactile/`.
+- Revisión independiente de esta corrección: **ship**, sin cambios pendientes.
+  DESIGN.md y el sidecar documentan los estados de lanzar/guardar.
+
+## Juego táctil y cámara · 16 de octubre de 2026
+
+Se conserva el mundo lila y el flujo de tres pantallas. El juego ahora combina
+fruta arrastrable hasta la boca, caricias, cosquillas y pelota con rebotes,
+persecución y empujones. La bienvenida dura aproximadamente un segundo y no
+hay un bloqueo global entre comida, mimos y juego. Hay sonido breve con mute,
+pausa, teclado y movimiento reducido. Cámara y galería comparten el mismo
+pipeline y reintento; se agregaron HEIC/HEIF y acceso LAN optativo.
+
+- **86 tests Python** pasaron en el venv Windows: lectura HEIC/HEIF con EXIF,
+  archivos dañados, entradas de cámara/galería y limpieza, bind local/LAN,
+  generación, contrato y exportación. **18 tests JavaScript** pasaron: alimento
+  único y retorno al fallar/cancelar, respuestas simultáneas, captura cancelada,
+  física acotada durante 20 segundos y estados con movimiento reducido.
+- **Ruff, sintaxis JavaScript, pip check y git diff --check** sin errores.
+  Continúan dos avisos de deprecación NumPy en los tests de Diffusers.
+- **Flujo completo real por Gradio y Chromium**: botón “Sacar foto” → archivo
+  HEIC → análisis/generación local CUDA → visor automático. Ejecución
+  `outputs/20261016_231435_d76aa3/`: `completed`, **105.46 s** totales,
+  **40.26 s** de difusión, perro reconocido y ZIP generado. La entrada HEIC
+  se codificó desde `test1.png`; no es una captura de una cámara física.
+- **Navegador 1440 × 900 y 390 × 844**, sin desborde horizontal: fruta
+  arrastrada a la boca transformada, comida mientras juega/recibe mimos,
+  roce corporal con cosquillas, lanzamiento y persecución de pelota, mute,
+  pausa que congela la física, teclado y movimiento reducido estable.
+  Cancelar un toque mediante CDP devuelve la fruta y libera la captura.
+- **Compatibilidad**: pato, guía de rig libre y manifest v1 sin variantes
+  opcionales cargan y comen. La guía libre valida estructura y movimiento,
+  no calidad de generación. El HTML continúa jugando sin red tras cargar.
+  Una exportación nueva abrió directamente con `file://` y el navegador sin
+  conexión: reproductor, física, audio y comida se cargaron sin servidor.
+- **Medición orientativa en Chromium de escritorio**: 116 renders durante
+  dos segundos, media **0.18 ms** y percentil 95 **0.30 ms** de trabajo JS
+  dentro de `render()`. No incluye toda la composición del navegador ni
+  representa rendimiento de un teléfono.
+- La app se inició con el argumento real `--lan`; la dirección
+  `http://192.168.0.225:7860` devolvió HTTP 200 y abrió en Chromium.
+  Sin ese argumento se mantiene el bind local.
+- **Revisión independiente de interfaz**: las cinco capturas y la escena
+  conservaron el mundo aprobado. La única corrección requerida fue sincronizar
+  DESIGN.md y su sidecar con los juguetes y reacciones nuevos. El revisor
+  comprobó esa corrección como resuelta y devolvió **ship** para ese punto.
+
+Las capturas están en `output/playwright/tactile/` y
+`.impeccable/review/tactile/` (ignoradas por git). Las vistas de resultado
+completo usan la nueva generación HEIC; las de comida y cosquillas reutilizan
+un perro generado previamente en el visor independiente con el nuevo runtime.
+
+Pendiente de comprobación física: selector nativo y cámara trasera en
+iPhone/Android, sonido y fluidez en ese dispositivo, y conexión desde otro
+equipo a través del firewall de Windows. El viewport móvil y los eventos CDP
+no equivalen a una prueba en un teléfono real. No se cambiaron modelos ni se
+redujo artificialmente el tiempo de generación para esta demostración.
+
 ## Flujo simple e interacciones · 15 de octubre de 2026 (16 de octubre UTC)
 
 La interfaz ahora muestra carga, espera y juego como pantallas separadas. La

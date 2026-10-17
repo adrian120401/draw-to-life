@@ -5,7 +5,32 @@ draw_to_life/web/scene.css, draw_to_life/web/character-player.js.
 
 Mode: Experience. Children and adults giving a drawing life locally.
 Approved: upload automatically → real analysis/generation stages → play.
-Food, affection, and play are visual interactions without persistent needs.
+Food, affection, and play are direct tactile interactions without persistent needs.
+
+## Approved tactile extension
+
+Preserve the existing upload/process visual world. Add native rear-camera photo
+capture alongside gallery and opt-in LAN access for filming on a phone.
+The final scene has physical fruit and a ball; rubbing the character creates
+affection/tickles. No persistent scores, saved pets, voice recording or added limbs.
+
+Motion thesis: the welcome is the focal birth moment (about one second).
+Continuous attention, drag anticipation, ball pursuit and touch reactions make
+cause and effect immediate. Gestures interrupt or blend rather than waiting
+behind a global action lock. Audio is short, local, gesture-unlocked and mutable.
+Budget: one RAF, cached layer textures/masks, bounded particles and canvas work,
+no inference or network per interaction. Reduced motion preserves feedback.
+
+## Approved bubble game
+
+Add a bubble-wand toy to the same scene. A round ends after five pops, with
+immediate pet reactions and a final golden bubble leading to three happy hops
+and a brief confetti celebration. Progress is five small dots; no timer or
+failure state pressures the child. Close always returns to free play, and
+completion offers replay or return. Pause, mute, keyboard and reduced motion
+work throughout. Bubble targets and particles are bounded; no new inference.
+Keep the existing visual world and minimal copy. The five-pop celebration is
+this extension's focal moment; bubble drift only invites the next touch.
 
 ## Direction contract
 
@@ -20,8 +45,9 @@ STORY: Upload a drawing, see it being understood and created, then touch and
 feed the resulting character. Actual pipeline phases drive the waiting copy.
 
 FIRST VIEWPORT: One centered photo token above “Subí tu dibujo”, with generous
-empty space. In the final screen a large character leads above three colorful
-buttons: Comida, Mimos, Jugar. Restart and download remain secondary.
+empty space and a discreet camera action. In the final screen a large character
+leads above three touchable toys: fruit, ball and bubble wand. The character itself receives
+caresses and tickles. Restart and download remain secondary.
 
 FORM: User-pinned sequential playroom; code-led implementation of the approved
 plan. No concept lottery: the user specified the sequence and palette and

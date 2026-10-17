@@ -34,7 +34,11 @@ def test_old_bases_gain_expressions_without_changing_anatomy_or_art(species, tmp
     with zipfile.ZipFile(archive) as bundle:
         assert {path for _, path in texture_entries(upgraded.manifest)} <= set(bundle.namelist())
         document = bundle.read("index.html")
-        assert b'data-action="feed"' in document and b'data-action="pet"' in document
+        assert b'data-tool="food"' in document and b'data-tool="ball"' in document
+        assert b'data-tool="bubbles"' in document and b'id="bubble-exit"' in document
+        assert b'id="bubble-replay"' in document and b'role="progressbar"' in document
+        runtime = bundle.read("character-player.js")
+        assert b"class PetScene" in runtime and b"class PetSound" in runtime
 
 
 def test_mouth_expressions_preserve_nose_pixels():

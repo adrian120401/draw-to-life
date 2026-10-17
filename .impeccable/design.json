@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-16T03:05:03.883Z",
+  "generatedAt": "2026-10-17T02:02:35.438498Z",
   "title": "Design System: Draw to Life",
   "extensions": {
     "colorMeta": {
@@ -186,88 +186,130 @@
           "oklch(95% 0.0999 87.89)"
         ]
       },
-      "food": {
+      "fruit": {
         "role": "secondary",
-        "displayName": "food",
+        "displayName": "fruit",
         "tonalRamp": [
-          "oklch(15% 0.0719 86.06)",
-          "oklch(27% 0.0719 86.06)",
-          "oklch(39% 0.0719 86.06)",
-          "oklch(51% 0.0719 86.06)",
-          "oklch(63% 0.0719 86.06)",
-          "oklch(75% 0.0719 86.06)",
-          "oklch(87% 0.0719 86.06)",
-          "oklch(95% 0.0719 86.06)"
+          "oklch(15% 0.1419 10.26)",
+          "oklch(27% 0.1419 10.26)",
+          "oklch(39% 0.1419 10.26)",
+          "oklch(51% 0.1419 10.26)",
+          "oklch(63% 0.1419 10.26)",
+          "oklch(75% 0.1419 10.26)",
+          "oklch(87% 0.1419 10.26)",
+          "oklch(95% 0.1419 10.26)"
         ]
       },
-      "food-ink": {
+      "fruit-edge": {
         "role": "secondary",
-        "displayName": "food ink",
+        "displayName": "fruit edge",
         "tonalRamp": [
-          "oklch(15% 0.0859 59.54)",
-          "oklch(27% 0.0859 59.54)",
-          "oklch(39% 0.0859 59.54)",
-          "oklch(51% 0.0859 59.54)",
-          "oklch(63% 0.0859 59.54)",
-          "oklch(75% 0.0859 59.54)",
-          "oklch(87% 0.0859 59.54)",
-          "oklch(95% 0.0859 59.54)"
+          "oklch(15% 0.1351 2.37)",
+          "oklch(27% 0.1351 2.37)",
+          "oklch(39% 0.1351 2.37)",
+          "oklch(51% 0.1351 2.37)",
+          "oklch(63% 0.1351 2.37)",
+          "oklch(75% 0.1351 2.37)",
+          "oklch(87% 0.1351 2.37)",
+          "oklch(95% 0.1351 2.37)"
         ]
       },
-      "affection": {
+      "fruit-stem": {
         "role": "secondary",
-        "displayName": "affection",
+        "displayName": "fruit stem",
         "tonalRamp": [
-          "oklch(15% 0.0515 349.95)",
-          "oklch(27% 0.0515 349.95)",
-          "oklch(39% 0.0515 349.95)",
-          "oklch(51% 0.0515 349.95)",
-          "oklch(63% 0.0515 349.95)",
-          "oklch(75% 0.0515 349.95)",
-          "oklch(87% 0.0515 349.95)",
-          "oklch(95% 0.0515 349.95)"
+          "oklch(15% 0.0573 46.83)",
+          "oklch(27% 0.0573 46.83)",
+          "oklch(39% 0.0573 46.83)",
+          "oklch(51% 0.0573 46.83)",
+          "oklch(63% 0.0573 46.83)",
+          "oklch(75% 0.0573 46.83)",
+          "oklch(87% 0.0573 46.83)",
+          "oklch(95% 0.0573 46.83)"
         ]
       },
-      "affection-ink": {
+      "fruit-leaf": {
         "role": "secondary",
-        "displayName": "affection ink",
+        "displayName": "fruit leaf",
         "tonalRamp": [
-          "oklch(15% 0.1273 351.36)",
-          "oklch(27% 0.1273 351.36)",
-          "oklch(39% 0.1273 351.36)",
-          "oklch(51% 0.1273 351.36)",
-          "oklch(63% 0.1273 351.36)",
-          "oklch(75% 0.1273 351.36)",
-          "oklch(87% 0.1273 351.36)",
-          "oklch(95% 0.1273 351.36)"
+          "oklch(15% 0.0929 157.79)",
+          "oklch(27% 0.0929 157.79)",
+          "oklch(39% 0.0929 157.79)",
+          "oklch(51% 0.0929 157.79)",
+          "oklch(63% 0.0929 157.79)",
+          "oklch(75% 0.0929 157.79)",
+          "oklch(87% 0.0929 157.79)",
+          "oklch(95% 0.0929 157.79)"
         ]
       },
-      "play": {
+      "fruit-shine": {
         "role": "secondary",
-        "displayName": "play",
+        "displayName": "fruit shine",
         "tonalRamp": [
-          "oklch(15% 0.0325 164.17)",
-          "oklch(27% 0.0325 164.17)",
-          "oklch(39% 0.0325 164.17)",
-          "oklch(51% 0.0325 164.17)",
-          "oklch(63% 0.0325 164.17)",
-          "oklch(75% 0.0325 164.17)",
-          "oklch(87% 0.0325 164.17)",
-          "oklch(95% 0.0325 164.17)"
+          "oklch(15% 0.0350 4.61)",
+          "oklch(27% 0.0350 4.61)",
+          "oklch(39% 0.0350 4.61)",
+          "oklch(51% 0.0350 4.61)",
+          "oklch(63% 0.0350 4.61)",
+          "oklch(75% 0.0350 4.61)",
+          "oklch(87% 0.0350 4.61)",
+          "oklch(95% 0.0350 4.61)"
         ]
       },
-      "play-ink": {
+      "ball": {
         "role": "secondary",
-        "displayName": "play ink",
+        "displayName": "ball",
         "tonalRamp": [
-          "oklch(15% 0.0719 166.56)",
-          "oklch(27% 0.0719 166.56)",
-          "oklch(39% 0.0719 166.56)",
-          "oklch(51% 0.0719 166.56)",
-          "oklch(63% 0.0719 166.56)",
-          "oklch(75% 0.0719 166.56)",
-          "oklch(87% 0.0719 166.56)",
-          "oklch(95% 0.0719 166.56)"
+          "oklch(15% 0.0885 166.30)",
+          "oklch(27% 0.0885 166.30)",
+          "oklch(39% 0.0885 166.30)",
+          "oklch(51% 0.0885 166.30)",
+          "oklch(63% 0.0885 166.30)",
+          "oklch(75% 0.0885 166.30)",
+          "oklch(87% 0.0885 166.30)",
+          "oklch(95% 0.0885 166.30)"
+        ]
+      },
+      "ball-ink": {
+        "role": "secondary",
+        "displayName": "ball ink",
+        "tonalRamp": [
+          "oklch(15% 0.0644 170.90)",
+          "oklch(27% 0.0644 170.90)",
+          "oklch(39% 0.0644 170.90)",
+          "oklch(51% 0.0644 170.90)",
+          "oklch(63% 0.0644 170.90)",
+          "oklch(75% 0.0644 170.90)",
+          "oklch(87% 0.0644 170.90)",
+          "oklch(95% 0.0644 170.90)"
+        ]
+      },
+      "ball-shine": {
+        "role": "secondary",
+        "displayName": "ball shine",
+        "tonalRamp": [
+          "oklch(15% 0.0465 167.10)",
+          "oklch(27% 0.0465 167.10)",
+          "oklch(39% 0.0465 167.10)",
+          "oklch(51% 0.0465 167.10)",
+          "oklch(63% 0.0465 167.10)",
+          "oklch(75% 0.0465 167.10)",
+          "oklch(87% 0.0465 167.10)",
+          "oklch(95% 0.0465 167.10)"
+        ]
+      },
+      "reaction-heart": {
+        "role": "secondary",
+        "displayName": "reaction heart",
+        "tonalRamp": [
+          "oklch(15% 0.1409 351.19)",
+          "oklch(27% 0.1409 351.19)",
+          "oklch(39% 0.1409 351.19)",
+          "oklch(51% 0.1409 351.19)",
+          "oklch(63% 0.1409 351.19)",
+          "oklch(75% 0.1409 351.19)",
+          "oklch(87% 0.1409 351.19)",
+          "oklch(95% 0.1409 351.19)"
         ]
       },
       "orbit": {
@@ -302,7 +344,7 @@
     "typographyMeta": {
       "action": {
         "displayName": "action",
-        "purpose": "Upload and processing status."
+        "purpose": "Upload, processing status and bubble success label."
       },
       "retry": {
         "displayName": "retry",
@@ -314,11 +356,15 @@
       },
       "label": {
         "displayName": "label",
-        "purpose": "Play tile labels; 13px on mobile."
+        "purpose": "Bold 13px labels beneath physical fruit, ball and bubble wand on every viewport."
       },
       "utility": {
         "displayName": "utility",
         "purpose": "Restart and download."
+      },
+      "camera": {
+        "displayName": "camera",
+        "purpose": "Bold secondary native-camera action."
       }
     },
     "shadows": [
@@ -333,36 +379,61 @@
         "purpose": "Primary action lift."
       },
       {
-        "name": "tile",
-        "value": "0 5px 14px #60408012",
-        "purpose": "Soft play tile lift."
+        "name": "toy-ground",
+        "value": "#63419b15",
+        "purpose": "SVG ellipse fill beneath each physical toy."
+      },
+      {
+        "name": "character-ground",
+        "value": "#63419b18",
+        "purpose": "Canvas ellipse fill beneath the character."
       }
     ],
     "motion": [
       {
-        "name": "tile-transition",
-        "value": ".18s ease-out",
-        "purpose": "Hover and press feedback."
-      },
-      {
         "name": "processing-loop",
         "value": "3s ease-in-out infinite",
-        "purpose": "Gentle loop removed under reduced motion."
+        "purpose": "Gentle processing loop removed under reduced motion."
+      },
+      {
+        "name": "welcome",
+        "value": "1.05s",
+        "purpose": "Short initial character welcome; can be interrupted by touch."
       },
       {
         "name": "feed",
-        "value": "3.6s",
-        "purpose": "Food reaction."
+        "value": "1.05s",
+        "purpose": "Eating sequence; only repeated food is blocked while the fruit is being eaten."
       },
       {
         "name": "affection",
-        "value": "2.2s",
-        "purpose": "Affection reaction."
+        "value": ".55s",
+        "purpose": "Fast direct affection that blends with feeding and tickles."
       },
       {
         "name": "play",
-        "value": "2.8s",
-        "purpose": "Play reaction."
+        "value": ".7s",
+        "purpose": "Short play pose alongside ongoing ball physics."
+      },
+      {
+        "name": "food-return",
+        "value": ".22s cubic ease-out",
+        "purpose": "Missed fruit drop returns home."
+      },
+      {
+        "name": "local-tone",
+        "value": ".19s",
+        "purpose": "Maximum synthesized tone duration; gesture-unlocked, muteable and stopped by pause."
+      },
+      {
+        "name": "bubble-pop",
+        "value": ".45s",
+        "purpose": "Immediate pet reaction to each of the first four bubble pops; burst lines last .35s and are omitted under reduced motion."
+      },
+      {
+        "name": "bubble-celebration",
+        "value": "2.4s",
+        "purpose": "Three happy hops and at most 48 pastel confetti pieces after the golden fifth pop; reduced motion retains happy expressions and success controls without hops or confetti."
       }
     ],
     "breakpoints": [
@@ -390,6 +461,14 @@
       "css": ".ds-button-retry{background:var(--violet,#6c4699);color:white;border:0;border-radius:22px;padding:14px 24px;min-width:180px;font:700 17px \"Trebuchet MS\",sans-serif;box-shadow:0 6px 18px #69418d20;cursor:pointer}.ds-button-retry:hover{background:#5d3688}.ds-button-retry:disabled{opacity:.55}.ds-button-retry:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     },
     {
+      "name": "Sacar foto",
+      "kind": "button",
+      "refersTo": "button-camera",
+      "description": "Secondary camera action. The shipping native file input uses accept=\"image/*\" and capture=\"environment\", then the shared upload flow.",
+      "html": "<button class=\"ds-camera\">Sacar foto</button>",
+      "css": ".ds-camera{background:transparent;color:var(--ink,#493366);border:0;box-shadow:none;min-width:150px;min-height:44px;padding:12px 20px;font:700 16px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-camera:hover{background:#dbcbed}.ds-camera:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
       "name": "Secondary action",
       "kind": "button",
       "refersTo": "button-utility",
@@ -400,33 +479,33 @@
     {
       "name": "Comida",
       "kind": "button",
-      "refersTo": "action-food",
-      "description": "Labeled pastel interaction tile.",
-      "html": "<button class=\"ds-action-food\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 7c-7-4-11 3-7 10 2 4 4 3 7 3s5 1 7-3c4-7 0-14-7-10Z\"/><path d=\"M12 7V3m0 3c0-4 4-4 5-3-1 3-3 3-5 3Z\"/></svg></span><span>Comida</span></button>",
-      "css": ".ds-action-food{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-food .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#fbe3af;color:#805026;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-food svg{width:31px;height:31px}.ds-action-food:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-food:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-food:disabled{opacity:.55;cursor:default}.ds-action-food[aria-pressed=\"true\"]{opacity:1}.ds-action-food:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-food{font-size:13px}.ds-action-food .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-food .ds-tile{transition:none}}"
+      "refersTo": "toy-food",
+      "description": "Physical fruit: drag to the mouth or activate to feed. Only this control is unavailable while its fruit is being eaten.",
+      "html": "<button class=\"ds-toy-food\" aria-label=\"Dar comida\"><svg viewBox=\"0 0 80 80\" aria-hidden=\"true\">\n<ellipse cx=\"40\" cy=\"68\" rx=\"27\" ry=\"5\" fill=\"#63419b15\"/>\n<path d=\"M40 22C12 7 8 36 20 56c7 12 14 7 20 7s13 5 20-7C72 36 68 7 40 22Z\" fill=\"#F07D91\" stroke=\"#BC5676\" stroke-width=\"2\"/>\n<path d=\"m40 24 2-14\" stroke=\"#76513F\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n<path d=\"M42 15c0-12 16-12 18-8-4 9-10 10-18 8Z\" fill=\"#69AF87\"/>\n<path d=\"M23 30c-3 4-3 8-2 12\" stroke=\"#FFE0E6\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\"/>\n</svg><span>Comida</span></button>",
+      "css": ".ds-toy-food{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;padding:0;width:86px;color:var(--ink,#493366);background:transparent;font:700 13px \"Trebuchet MS\",sans-serif;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.ds-toy-food svg{width:80px;height:80px;pointer-events:none}.ds-toy-food:active{cursor:grabbing}.ds-toy-food:hover:not(:disabled) svg{filter:brightness(1.04)}.ds-toy-food:disabled{cursor:default}.ds-toy-food[data-away=\"true\"] svg{opacity:0}.ds-toy-food:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     },
     {
-      "name": "Mimos",
+      "name": "Pelota",
       "kind": "button",
-      "refersTo": "action-affection",
-      "description": "Labeled pastel interaction tile.",
-      "html": "<button class=\"ds-action-affection\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 9 8 15 7-6 12-11 8-15Z\"/></svg></span><span>Mimos</span></button>",
-      "css": ".ds-action-affection{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-affection .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#f7cee0;color:#933c68;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-affection svg{width:31px;height:31px}.ds-action-affection:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-affection:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-affection:disabled{opacity:.55;cursor:default}.ds-action-affection[aria-pressed=\"true\"]{opacity:1}.ds-action-affection:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-affection{font-size:13px}.ds-action-affection .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-affection .ds-tile{transition:none}}"
+      "refersTo": "toy-ball",
+      "description": "Physical ball: drag or activate to launch; the character chases and nudges it. While active, this same control reads Guardar, has aria-label=\"Guardar la pelota\" and aria-pressed=\"true\". Tap or keyboard activation stores it, as does dragging the live ball back home. Storage ends chase/play, returns the character toward center and preserves food. The stored control reads Pelota, has aria-label=\"Lanzar la pelota\" and aria-pressed=\"false\".",
+      "html": "<button class=\"ds-toy-ball\" aria-label=\"Lanzar la pelota\" aria-pressed=\"false\"><svg viewBox=\"0 0 80 80\" aria-hidden=\"true\">\n<ellipse cx=\"40\" cy=\"68\" rx=\"27\" ry=\"5\" fill=\"#63419b15\"/>\n<circle cx=\"40\" cy=\"36\" r=\"28\" fill=\"#7CC8A9\" stroke=\"#376D5C\" stroke-width=\"2\"/>\n<circle cx=\"40\" cy=\"36\" r=\"13\" fill=\"none\" stroke=\"#376D5C\" stroke-width=\"2\"/>\n<path d=\"m40 8 0 15m-24 27 13-7m35 7-13-7\" stroke=\"#376D5C\" stroke-width=\"2\"/>\n<path d=\"M23 23c3-4 6-6 11-7\" stroke=\"#C9F0DF\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\"/>\n</svg><span>Pelota</span></button>",
+      "css": ".ds-toy-ball{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;padding:0;width:86px;color:var(--ink,#493366);background:transparent;font:700 13px \"Trebuchet MS\",sans-serif;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.ds-toy-ball svg{width:80px;height:80px;pointer-events:none}.ds-toy-ball:active{cursor:grabbing}.ds-toy-ball:hover:not(:disabled) svg{filter:brightness(1.04)}.ds-toy-ball:disabled{cursor:default}.ds-toy-ball[data-away=\"true\"] svg{opacity:.2}.ds-toy-ball:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     },
     {
-      "name": "Jugar",
+      "name": "Sound",
       "kind": "button",
-      "refersTo": "action-play",
-      "description": "Labeled pastel interaction tile.",
-      "html": "<button class=\"ds-action-play\" aria-pressed=\"false\"><span class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M7 5c2 4 6 8 12 12M4 13c5-3 10-3 16-2M13 3c-3 5-3 11-1 18\"/></svg></span><span>Jugar</span></button>",
-      "css": ".ds-action-play{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;padding:0;color:var(--ink,#493366);background:transparent;font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-action-play .ds-tile{display:grid;place-items:center;width:72px;height:68px;border-radius:24px;background:#cfe9dc;color:#316c56;box-shadow:0 5px 14px #60408012;transition:transform .18s ease-out,background .18s ease-out}.ds-action-play svg{width:31px;height:31px}.ds-action-play:hover:not(:disabled) .ds-tile{transform:translateY(-4px) rotate(-3deg)}.ds-action-play:active:not(:disabled) .ds-tile{transform:translateY(1px) scale(.96)}.ds-action-play:disabled{opacity:.55;cursor:default}.ds-action-play[aria-pressed=\"true\"]{opacity:1}.ds-action-play:focus-visible{outline:3px solid #724796;outline-offset:5px}@media(max-width:480px){.ds-action-play{font-size:13px}.ds-action-play .ds-tile{width:66px;height:62px;border-radius:21px}}@media(prefers-reduced-motion:reduce){.ds-action-play .ds-tile{transition:none}}"
+      "refersTo": "button-sound",
+      "description": "Cream circular mute control; local gesture-unlocked tones only.",
+      "html": "<button class=\"ds-sound\" aria-label=\"Silenciar sonidos\" aria-pressed=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m11 4-5 4H3v8h3l5 4Z\"/><path d=\"M15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14\"/></svg></button>",
+      "css": ".ds-sound{background:var(--cream,#fffaf1);color:var(--ink,#493366);border:0;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;cursor:pointer}.ds-sound svg{width:20px;height:20px}.ds-sound:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     },
     {
       "name": "Pause",
       "kind": "button",
       "refersTo": "button-pause",
-      "description": "Circular control at the stage’s upper right.",
-      "html": "<button class=\"ds-pause\" aria-label=\"Pausar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 5v14M16 5v14\"/></svg></button>",
+      "description": "Cream circular pause/resume control; stops simulation, cancels dragging and stops audio.",
+      "html": "<button class=\"ds-pause\" aria-label=\"Pausar\" aria-pressed=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 5v14M16 5v14\"/></svg></button>",
       "css": ".ds-pause{background:var(--cream,#fffaf1);color:var(--ink,#493366);border:0;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;cursor:pointer}.ds-pause svg{width:20px;height:20px}.ds-pause:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     },
     {
@@ -444,15 +523,71 @@
       "description": "Soft animated object with actual pipeline status.",
       "html": "<div class=\"ds-creating\" role=\"status\"><div class=\"ds-orbit\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 9 8 15 7-6 12-11 8-15Z\"/></svg></div><p>Mirando tu dibujo…</p></div>",
       "css": ".ds-creating{text-align:center;color:var(--ink,#493366)}.ds-creating p{margin:26px 0 0;font:700 20px \"Trebuchet MS\",sans-serif}.ds-orbit{width:112px;height:112px;margin:auto;border-radius:40% 60% 55% 45%;background:#ccb1ec;display:grid;place-items:center;animation:ds-imagining 3s ease-in-out infinite}.ds-orbit svg{width:54px;height:54px;color:#fffaf1}@keyframes ds-imagining{0%,100%{transform:rotate(-10deg) scale(.94);border-radius:40% 60% 55% 45%}50%{transform:rotate(12deg) scale(1.04);border-radius:60% 40% 45% 55%}}@media(prefers-reduced-motion:reduce){.ds-orbit{animation:none}}"
+    },
+    {
+      "name": "Burbujas",
+      "kind": "button",
+      "refersTo": "toy-bubbles",
+      "description": "Third physical toy starts a five-pop round, stores the ball and preserves an existing food sequence. All three toys hide until exit.",
+      "html": "<button class=\"ds-toy-bubbles\" aria-label=\"Jugar a las burbujas\"><svg viewBox=\"0 0 80 80\" aria-hidden=\"true\">\n<ellipse cx=\"40\" cy=\"68\" rx=\"27\" ry=\"5\" fill=\"#63419b15\"/>\n<path d=\"m24 60 14-23\" stroke=\"#6c4699\" stroke-width=\"8\" stroke-linecap=\"round\"/>\n<circle cx=\"42\" cy=\"29\" r=\"16\" fill=\"none\" stroke=\"#6c4699\" stroke-width=\"5\"/>\n<circle cx=\"63\" cy=\"13\" r=\"10\" fill=\"#C7B3EB33\" stroke=\"#6c4699\" stroke-width=\"2\"/>\n<circle cx=\"16\" cy=\"23\" r=\"7\" fill=\"#F1ADC833\" stroke=\"#BC5676\" stroke-width=\"2\"/>\n<path d=\"M59 8c1-1 3-2 5-2M38 19c3-2 6-2 8-1\" stroke=\"#fffaf1\" stroke-width=\"3\" fill=\"none\" stroke-linecap=\"round\"/>\n</svg><span>Burbujas</span></button>",
+      "css": ".ds-toy-bubbles{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;padding:0;width:86px;color:var(--ink,#493366);background:transparent;font:700 13px \"Trebuchet MS\",sans-serif;cursor:grab;touch-action:none;user-select:none}.ds-toy-bubbles svg{width:80px;height:80px;pointer-events:none}.ds-toy-bubbles:hover:not(:disabled) svg{filter:brightness(1.04)}.ds-toy-bubbles:active{cursor:grabbing}.ds-toy-bubbles:disabled{cursor:default}.ds-toy-bubbles:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Bubble targets",
+      "kind": "button",
+      "refersTo": "bubble-target",
+      "description": "Illustrated specimen of the canvas bubbles and transparent native targets. At most three targets exist; each is at least 44px in both dimensions. Tab/Enter and canvas Enter/Space pop bubbles; pause disables them. The golden fifth bubble has a star.",
+      "html": "<div class=\"ds-bubble-pair\"><button class=\"ds-bubble-target\" aria-label=\"Reventar burbuja\"><svg viewBox=\"0 0 80 80\" aria-hidden=\"true\"><circle cx=\"40\" cy=\"40\" r=\"32\" fill=\"#C7B3EB33\" stroke=\"#6c4699\" stroke-width=\"2\"/><path d=\"M18 31a24 24 0 0 1 18-14\" fill=\"none\" stroke=\"#fffaf1\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"54\" cy=\"55\" r=\"3\" fill=\"#fffaf1\"/></svg></button><button class=\"ds-bubble-target\" aria-label=\"Reventar la burbuja dorada\"><svg viewBox=\"0 0 80 80\" aria-hidden=\"true\"><circle cx=\"40\" cy=\"40\" r=\"35\" fill=\"#F7D88D66\" stroke=\"#6c4699\" stroke-width=\"2\"/><path d=\"M40 22 45 34 58 35 48 44 51 57 40 50 29 57 32 44 22 35 35 34Z\" fill=\"#F7D88D\" stroke=\"#6c4699\"/><path d=\"M15 31a27 27 0 0 1 21-17\" fill=\"none\" stroke=\"#fffaf1\" stroke-width=\"4\" stroke-linecap=\"round\"/></svg></button></div>",
+      "css": ".ds-bubble-pair{display:flex;gap:20px;align-items:center}.ds-bubble-target{background:transparent;border:0;border-radius:50%;padding:0;width:80px;height:80px;min-width:44px;min-height:44px;cursor:pointer;touch-action:none}.ds-bubble-target svg{width:100%;height:100%;pointer-events:none}.ds-bubble-target:disabled{cursor:default}.ds-bubble-target:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Bubble progress",
+      "kind": "custom",
+      "refersTo": "bubble-progress",
+      "description": "Five dots fill from zero through five with each pop; accessible progressbar and live announcements communicate round progress. No countdown, loss state or persistent score.",
+      "html": "<div class=\"ds-bubble-progress\" role=\"progressbar\" aria-label=\"Burbujas reventadas\" aria-valuemin=\"0\" aria-valuemax=\"5\" aria-valuenow=\"3\"><i data-filled=\"true\"></i><i data-filled=\"true\"></i><i data-filled=\"true\"></i><i></i><i></i></div>",
+      "css": ".ds-bubble-progress{display:flex;align-items:center;gap:5px;height:44px;padding:0 10px;border-radius:22px;background:var(--cream,#fffaf1)}.ds-bubble-progress i{width:9px;height:9px;border:1.5px solid var(--violet,#6c4699);border-radius:50%}.ds-bubble-progress i[data-filled=\"true\"]{background:var(--violet,#6c4699)}"
+    },
+    {
+      "name": "Bubble exit",
+      "kind": "button",
+      "refersTo": "button-bubble-exit",
+      "description": "44px cream close control beside upper-left progress. Exit, Volver or Escape clears the round and returns focus to Burbujas; exit remains available while paused.",
+      "html": "<button class=\"ds-bubble-exit\" aria-label=\"Salir de burbujas\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 6 12 12M18 6 6 18\"/></svg></button>",
+      "css": ".ds-bubble-exit{background:var(--cream,#fffaf1);color:var(--ink,#493366);border:0;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;cursor:pointer}.ds-bubble-exit svg{width:20px;height:20px}.ds-bubble-exit:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Bubble success",
+      "kind": "custom",
+      "refersTo": "bubble-success",
+      "description": "Victory label appears on the fifth pop and remains with replay/back after the 2.4s celebration. Uses the existing 20px action hierarchy.",
+      "html": "<p class=\"ds-bubble-success\">¡Lo hiciste!</p>",
+      "css": ".ds-bubble-success{margin:0 0 10px;text-align:center;color:var(--ink,#493366);font:700 20px \"Trebuchet MS\",sans-serif}"
+    },
+    {
+      "name": "Otra vez",
+      "kind": "button",
+      "refersTo": "button-bubble-replay",
+      "description": "Bold 14px completion action resets bubbles, progress and particles for a new round. Disabled while paused.",
+      "html": "<button class=\"ds-bubble-replay\">Otra vez</button>",
+      "css": ".ds-bubble-replay{border:0;border-radius:22px;padding:12px 18px;min-height:44px;background:var(--violet,#6c4699);color:var(--cream,#fffaf1);font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-bubble-replay:hover:not(:disabled){background:#5d3688}.ds-bubble-replay:disabled{opacity:.55;cursor:default}.ds-bubble-replay:focus-visible{outline:3px solid #724796;outline-offset:5px}"
+    },
+    {
+      "name": "Volver",
+      "kind": "button",
+      "refersTo": "button-bubble-back",
+      "description": "Transparent bold completion action exits to the three-toy playroom; paired with Otra vez at an 8px gap.",
+      "html": "<button class=\"ds-bubble-back\">Volver</button>",
+      "css": ".ds-bubble-back{border:0;border-radius:22px;padding:12px 18px;min-height:44px;background:transparent;color:var(--ink,#493366);font:700 14px \"Trebuchet MS\",sans-serif;cursor:pointer}.ds-bubble-back:hover{background:#dbcbed}.ds-bubble-back:focus-visible{outline:3px solid #724796;outline-offset:5px}"
     }
   ],
   "narrative": {
     "northStar": "The Lilac Playroom",
-    "overview": "A spacious, playful world where the drawing is the main event. Pale lilac fills the viewport; soft lavender shapes, pink circles and butter stars gather at its edges. Cream objects and rounded controls feel approachable without competing with the character.\n\nThe interface uses local Trebuchet typography, minimal Rioplatense Spanish and recognizable outline drawings. Movement gives the existing character affection and personality while preserving its anatomy.",
+    "overview": "A spacious, playful world where the drawing is the main event. Pale lilac fills the viewport; soft lavender shapes, pink circles and butter stars gather at its edges. Cream objects and rounded controls feel approachable without competing with the character.\n\nThe interface uses local Trebuchet typography, minimal Rioplatense Spanish and recognizable outline drawings. Colored fruit, a ball and a bubble wand sit directly in the character's world. Movement gives the existing character affection and personality while preserving its anatomy; touch receives immediate feedback rather than waiting for a prior reaction to finish.",
     "keyCharacteristics": [
       "Open lilac space with peripheral geometric decoration.",
       "Soft cream objects and violet primary actions.",
-      "Large character imagery, short labels and gentle reactions."
+      "Large character imagery, three physical toys and direct touch reactions."
     ],
     "rules": [
       {
@@ -463,7 +598,8 @@
     ],
     "dos": [
       "Do keep pastel edge decoration behind the central drawing and controls.",
-      "Do pair play icons with short visible labels and preserve clear keyboard focus.",
+      "Do pair the three physical toys with short visible labels and preserve clear keyboard focus.",
+      "Do keep affection on the character and let new gestures blend or interrupt existing reactions.",
       "Do honor reduced motion and animate only the character anatomy already present."
     ],
     "donts": [

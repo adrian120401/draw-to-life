@@ -58,6 +58,7 @@ def test_upload_automatically_moves_through_generation_to_play(tmp_path, monkeyp
     assert result[5]["value"].endswith("character.zip") and result[5]["visible"]
     reset = functions["reset"]()
     assert reset[8] == "upload" and reset[4] == "" and reset[9] is None
+    assert reset[10] is None and reset[11] is None
     assert reset[5]["value"] is None
     assert demo.config["enable_queue"]
     assert settings.output_dir.exists()
@@ -75,3 +76,15 @@ def test_invalid_upload_never_calls_generation(tmp_path, monkeypatch):
 
 def test_errors_are_escaped():
     assert "&lt;script&gt;" in ui.error_html("<script>")
+
+
+def test_camera_and_gallery_replace_the_same_source_and_reset_it(tmp_path, monkeypatch):
+    _settings, _pipeline, demo, functions = configured_ui(tmp_path, monkeypatch)
+    gallery = functions["select_file"]("gallery.jpg")
+    camera = functions["select_file"]("camera.heic")
+    assert gallery[-1] == "gallery.jpg" and camera[-1] == "camera.heic"
+    assert gallery[-2] == camera[-2] == "processing"
+    assert functions["reset"]()[-1] is None
+    uploaders = [c for c in demo.config["components"] if c["type"] == "uploadbutton"]
+    assert len(uploaders) == 2
+    assert all(".heic" in c["props"]["file_types"] for c in uploaders)

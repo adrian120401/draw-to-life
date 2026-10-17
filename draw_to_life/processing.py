@@ -10,6 +10,11 @@ from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image, ImageOps, UnidentifiedImageError
+from pillow_heif import register_heif_opener
+
+register_heif_opener(thumbnails=False)
+
+IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif")
 
 
 class DrawingError(ValueError):
@@ -32,8 +37,8 @@ class Drawing:
 
 def load_image(path: str | Path) -> Image.Image:
     path = Path(path)
-    if path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
-        raise DrawingError("Usá una imagen JPG, PNG o WebP.")
+    if path.suffix.lower() not in IMAGE_EXTENSIONS:
+        raise DrawingError("Usá una imagen JPG, PNG, WebP o HEIC.")
     if path.stat().st_size > 30 * 1024 * 1024:
         raise DrawingError("La imagen supera 30 MB. Reducila antes de cargarla.")
     try:

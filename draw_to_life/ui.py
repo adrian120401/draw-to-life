@@ -7,11 +7,11 @@ from threading import Thread
 
 import gradio as gr
 
-from .config import Settings
+from .config import ROOT, Settings
 from .models import diagnose
 from .pipeline import Pipeline
 from .preview import preview_html
-from .processing import load_image
+from .processing import IMAGE_EXTENSIONS, load_image
 from .scene import DECORATIONS, SCENE_CSS, icon
 
 LOGGER = logging.getLogger(__name__)
@@ -36,6 +36,9 @@ body, .gradio-container { background: var(--lilac) !important; }
     padding: 19px 30px; font: 700 20px 'Trebuchet MS',sans-serif; box-shadow: 0 6px 18px #69418d20; }
 #upload-button:hover, #retry-button:hover { background: #5d3688; }
 #upload-button:disabled { opacity: .55; }
+#camera-upload { width: auto !important; min-width: 150px; flex: none; border: 0; background: transparent;
+    color: var(--ink); box-shadow: none; padding: 12px 20px; min-height: 44px; font: 700 16px 'Trebuchet MS',sans-serif; }
+#camera-upload:hover { background: #dbcbed; }
 #retry-button { min-width: 180px; padding: 14px 24px; font-size: 17px; }
 #upload-error { max-width: 360px; border: 0; background: transparent; padding: 0; }
 .upload-error { text-align: center; color: var(--ink); font-size: 16px; line-height: 1.5; }
@@ -117,13 +120,17 @@ def build_ui(settings: Settings) -> gr.Blocks:
         LOGGER.warning("Preparación pendiente: %s", report.get("character_error") or "CUDA no disponible")
     theme = gr.themes.Base(primary_hue="purple", neutral_hue="purple",
                            font=["Trebuchet MS", "sans-serif"], font_mono=["Consolas", "monospace"])
-    with gr.Blocks(title="Draw to Life", theme=theme, css=CSS, analytics_enabled=False) as demo:
+    camera_js = (ROOT / "draw_to_life/web/camera.js").read_text(encoding="utf-8")
+    with gr.Blocks(title="Draw to Life", theme=theme, css=CSS, js=camera_js, analytics_enabled=False) as demo:
         gr.HTML(DECORATIONS, elem_id="scenery")
         phase = gr.State("upload")
+        selected_file = gr.State(None)
         with gr.Column(elem_id="upload-step") as upload_step:
             gr.HTML(f'<div class="photo-token" aria-hidden="true">{icon("photo")}</div>', elem_id="upload-picture")
-            source = gr.UploadButton("Subí tu dibujo", file_types=[".jpg", ".jpeg", ".png", ".webp"],
+            source = gr.UploadButton("Subí tu dibujo", file_types=list(IMAGE_EXTENSIONS),
                                      type="filepath", interactive=ready, elem_id="upload-button")
+            camera = gr.UploadButton("Sacar foto", file_types=list(IMAGE_EXTENSIONS),
+                                     type="filepath", interactive=ready, elem_id="camera-upload")
             error = gr.HTML("", elem_id="upload-error")
             retry = gr.Button("Reintentar", visible=False, elem_id="retry-button")
             if not ready:
@@ -174,12 +181,18 @@ def build_ui(settings: Settings) -> gr.Blocks:
                 yield screen("upload", problem="No pudimos darle vida. Probá otra vez o subí otro dibujo.", can_retry=True)
 
         def reset():
-            return (*screen("upload"), None)
+            return (*screen("upload"), None, None, None)
 
-        for trigger in (source.upload, retry.click):
-            trigger(begin, outputs=outputs, queue=False, show_progress="hidden").then(
-                process, [source], outputs, concurrency_id="drawing", concurrency_limit=1,
+        def select_file(file):
+            return (*begin(), file)
+
+        for uploader in (source, camera):
+            uploader.upload(select_file, [uploader], [*outputs, selected_file], queue=False, show_progress="hidden").then(
+                process, [selected_file], outputs, concurrency_id="drawing", concurrency_limit=1,
                 show_progress="hidden", trigger_mode="once")
-        again.click(reset, outputs=[*outputs, source], queue=False, show_progress="hidden")
+        retry.click(begin, outputs=outputs, queue=False, show_progress="hidden").then(
+            process, [selected_file], outputs, concurrency_id="drawing", concurrency_limit=1,
+            show_progress="hidden", trigger_mode="once")
+        again.click(reset, outputs=[*outputs, source, camera, selected_file], queue=False, show_progress="hidden")
     demo.queue(default_concurrency_limit=1, max_size=3, api_open=False)
     return demo

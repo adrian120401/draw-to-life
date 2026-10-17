@@ -89,3 +89,22 @@ def test_invalid_file_and_transparent_input(tmp_path: Path):
     path = tmp_path / "transparent.png"
     transparent.save(path)
     assert np.array(load_image(path))[0, 0].tolist() == [255, 255, 255]
+
+
+@pytest.mark.parametrize("extension", [".heic", ".heif"])
+def test_phone_heic_is_read_with_correct_orientation(tmp_path, extension):
+    image = Image.new("RGB", (80,40), "#80c090")
+    exif = Image.Exif()
+    exif[274] = 6
+    path = tmp_path / ("camera" + extension)
+    image.save(path, format="HEIF", exif=exif.tobytes())
+    loaded = load_image(path)
+    assert loaded.mode == "RGB"
+    assert loaded.size == (40,80)
+
+
+def test_corrupt_phone_capture_is_rejected(tmp_path):
+    path = tmp_path / "broken.heic"
+    path.write_bytes(b"not a camera photo")
+    with pytest.raises(DrawingError, match="leer"):
+        load_image(path)
