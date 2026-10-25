@@ -69,7 +69,12 @@ def _paper_crop(rgb: np.ndarray) -> tuple[np.ndarray, tuple[int, int]]:
         # No recortar un parche pequeño claro ni cortar el dibujo al borde.
         if 0.40 < coverage < 0.94 and pw > w * 0.55 and ph > h * 0.55:
             inset = max(2, round(min(pw, ph) * 0.012))
-            return rgb[y + inset:y + ph - inset, x + inset:x + pw - inset], (x + inset, y + inset)
+            # Una hoja inclinada deja triángulos de mesa dentro de su bounding box.
+            paper = np.zeros((h, w), np.uint8)
+            cv2.drawContours(paper, [largest], -1, 255, cv2.FILLED)
+            paper = cv2.erode(paper, np.ones((inset * 2 + 1,) * 2, np.uint8))
+            masked = np.where(paper[:, :, None] > 0, rgb, 255).astype(np.uint8)
+            return masked[y + inset:y + ph - inset, x + inset:x + pw - inset], (x + inset, y + inset)
     return rgb, (0, 0)
 
 
@@ -95,10 +100,11 @@ def _group_components(mask: np.ndarray) -> np.ndarray:
     count, labels, stats, centers = cv2.connectedComponentsWithStats(grouping)
     if count <= 1:
         raise DrawingError("No encontré trazos. Probá una foto más cercana y con mejor luz.")
+    original_areas = np.bincount(labels.ravel(), weights=(mask > 0).ravel(), minlength=count)
     scores = []
     for label in range(1, count):
         x, y, cw, ch, _ = stats[label]
-        original_area = np.count_nonzero(mask[labels == label])
+        original_area = original_areas[label]
         cx, cy = centers[label]
         distance = np.hypot((cx - w / 2) / w, (cy - h / 2) / h)
         border_penalty = 0.25 if (x == 0 or y == 0 or x + cw >= w or y + ch >= h) else 1
@@ -110,7 +116,9 @@ def _group_components(mask: np.ndarray) -> np.ndarray:
     margin = max(8, round(max(cw, ch) * 0.12))
     for label in range(1, count):
         cx, cy = centers[label]
-        if x - margin <= cx <= x + cw + margin and y - margin <= cy <= y + ch + margin:
+        feature_area = original_areas[label]
+        if (feature_area >= max(20, original_areas[main] * .003)
+                and x - margin <= cx <= x + cw + margin and y - margin <= cy <= y + ch + margin):
             chosen |= labels == label
     selected = np.where(chosen, mask, 0).astype(np.uint8)
     area = np.count_nonzero(selected)
@@ -121,12 +129,33 @@ def _group_components(mask: np.ndarray) -> np.ndarray:
 
 def _fill_enclosed(mask: np.ndarray) -> np.ndarray:
     """Rellenar interiores cerrados, sin rellenar todo el rectángulo del recorte."""
-    closed = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
+    # Un trazo rehecho a mano suele tener pequeños cortes. Cerrarlos a escala
+    # del dibujo antes del flood-fill, sin envolver todo en un rectángulo.
+    diameter = max(3, round(min(mask.shape) * .022) | 1)
+    closed = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,
+                             cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (diameter,) * 2))
     padded = cv2.copyMakeBorder(closed, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=0)
     flood = padded.copy()
     cv2.floodFill(flood, None, (0, 0), 255)
     filled = padded | cv2.bitwise_not(flood)
     return filled[1:-1, 1:-1]
+
+
+def pigment_mask(rgb: np.ndarray) -> np.ndarray:
+    """Separar tinta/lápiz del papel claro, su grano y sombras suaves.
+
+    El umbral adaptativo anterior promovía cada fibra gris a primer plano.
+    Exigir pigmento cromático o contraste fuerte evita esa silueta de hoja.
+    """
+    smooth = cv2.GaussianBlur(rgb, (3, 3), .7)
+    gray = cv2.cvtColor(smooth, cv2.COLOR_RGB2GRAY)
+    hsv = cv2.cvtColor(smooth, cv2.COLOR_RGB2HSV)
+    spread = smooth.max(axis=2).astype(np.int16) - smooth.min(axis=2)
+    background = cv2.GaussianBlur(gray, (0, 0), max(5, min(gray.shape) / 70))
+    contrast = background.astype(np.int16) - gray.astype(np.int16)
+    colored = (hsv[:, :, 1] > 60) & (spread > 32)
+    pencil = (contrast > 25) & (gray < 220)
+    return ((gray < 130) | colored | pencil).astype(np.uint8) * 255
 
 
 def dominant_colors(rgb: np.ndarray, foreground: np.ndarray) -> tuple[list[dict], bool]:
@@ -165,17 +194,10 @@ def preprocess(image: Image.Image) -> Drawing:
     working.thumbnail((1400, 1400), Image.Resampling.LANCZOS)
     rgb, offset = _paper_crop(np.array(working))
     cleaned = _normalize_paper(rgb)
-    gray = cv2.cvtColor(cleaned, cv2.COLOR_RGB2GRAY)
-    hsv = cv2.cvtColor(cleaned, cv2.COLOR_RGB2HSV)
-    # Contraste local + color: los lápices amarillos no dependen de ser oscuros.
-    local = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                  cv2.THRESH_BINARY_INV, 35, 9)
-    ink = ((gray < 180) | ((local > 0) & (gray < 242)) |
-           (hsv[:, :, 1] > 45))
-    ink = ink.astype(np.uint8) * 255
+    ink = pigment_mask(cleaned)
     # Filtrar puntitos de ruido; conservar los ojos pequeños.
     count, labels, stats, _ = cv2.connectedComponentsWithStats(ink)
-    minimum = max(3, round(ink.size * 0.000004))
+    minimum = max(8, round(ink.size * 0.000025))
     keep = np.zeros(count, dtype=np.uint8)
     keep[1:] = np.where(stats[1:, cv2.CC_STAT_AREA] >= minimum, 255, 0)
     ink = _group_components(keep[labels])
@@ -184,8 +206,11 @@ def preprocess(image: Image.Image) -> Drawing:
     margin = max(12, round(max(w, h) * 0.07))
     left, top = max(0, x - margin), max(0, y - margin)
     right, bottom = min(rgb.shape[1], x + w + margin), min(rgb.shape[0], y + h + margin)
-    crop = cleaned[top:bottom, left:right]
+    crop = cleaned[top:bottom, left:right].copy()
     strokes = ink[top:bottom, left:right]
+    # El modelo ve el personaje sobre blanco, incluso dentro de los contornos.
+    # El alpha conserva esos interiores para que el rig tenga superficies sólidas.
+    crop[strokes == 0] = 255
     silhouette = _fill_enclosed(strokes)
     colors, has_color = dominant_colors(crop, silhouette)
     # Mantener interiores blancos opacos: papel exterior sí, ojos blancos no.

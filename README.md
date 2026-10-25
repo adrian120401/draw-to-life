@@ -39,6 +39,20 @@ La terminal muestra la URL de la PC para abrirla en el teléfono. La PC debe per
 
 **Sacar foto** abre el selector de cámara nativo con preferencia por la cámara trasera; **Subí tu dibujo** conserva la galería. El comportamiento exacto del selector depende del navegador del teléfono. Se admiten JPG, PNG, WebP, HEIC y HEIF, con orientación EXIF corregida y los mismos límites de 30 MB y 40 megapíxeles. No hace falta mantener una cámara en vivo ni usar `getUserMedia`.
 
+### Hoja de Stitch preparada para la demo
+
+La hoja de referencia ya está preparada en `assets/demo/stitch/`, con un rig 2D propio, piezas, pivotes y expresiones. Se inicia con los mismos scripts `scripts/start.ps1` o `scripts/start.ps1 -Lan`; no hace falta ejecutar una preparación adicional. Reiniciar la app carga los cambios.
+
+Al usar **Sacar foto** (o la galería), primero se separa el pigmento del papel claro, su textura y sombras suaves. Se eliminan motas aisladas y se cierran pequeños cortes del contorno antes de rellenar la silueta; los interiores sin pintar conservan superficie opaca y blanca. Los modelos reciben el personaje aislado sobre blanco.
+
+El modo automático intenta reconocer la misma hoja mediante SIFT y una homografía validada. Si se dibujó otra vez, compara la silueta completa con la referencia y el rig, normalizando escala, proporciones y giros de hasta 18°; exige una coincidencia suficiente y una ventaja frente a las formas de los otros animales del catálogo. Este segundo camino admite diferencias entre trazos y contornos de birome azul. No usa la foto del segundo dibujo como otra plantilla: está guardada únicamente como prueba de regresión.
+
+Si coincide, reutiliza las piezas animadas y toma tres colores por región de la foto nueva: cuerpo/cabeza, pancita y orejas/nariz. Las regiones se alinean antes de medir sus colores para evitar incluir mesa o garabatos exteriores; en el dibujo rehecho también se descartan líneas finas de birome al medir el relleno. Las zonas sin color detectable quedan claras. La transferencia conserva el sombreado y los contornos del rig, sin copiar cada trazo del lápiz. No se ejecutan SmolVLM ni difusión durante ese recorrido. Su procedencia se registra como `prepared` / `authored_vector_rig`, diferenciada de las bases generadas con IA.
+
+El personaje debe aparecer completo sobre papel claro y con trazos visibles. Las coincidencias parciales o insuficientes siguen el flujo normal de IA; también lo conservan los modos explícitos `free`, `template`, `legacy` y la selección manual de otro animal. El paquete de demo permite usar este personaje incluso sin los modelos de generación instalados; otros dibujos siguen necesitando los modelos. El reconocimiento por forma tiene umbrales conservadores y no garantiza cualquier versión de Stitch ni sustituye un clasificador semántico general.
+
+Para reconstruir el recurso a partir de la foto de referencia original (900×1600), está `python scripts/prepare_demo_character.py RUTA_DE_LA_FOTO`. Este comando es de preparación, no se ejecuta durante la demo. Solo se guarda el contorno recortado de la referencia, sin el entorno de la foto. El ZIP portable preparado está en `assets/demo/stitch.zip`.
+
 Los modos y la corrección manual del animal siguen disponibles en la CLI y la API Python:
 
 | Modo | Comportamiento |

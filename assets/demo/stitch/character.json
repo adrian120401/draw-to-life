@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "id": "stitch-demo",
+  "name": "Stitch",
+  "species": "stitch",
+  "creature": "Stitch with long notched ears and a wide toothy smile",
+  "canvas": [
+    512,
+    512
+  ],
+  "palette": [
+    "#F39AA8",
+    "#F9D3DB",
+    "#C9698C"
+  ],
+  "layers": [
+    {
+      "id": "arm_left",
+      "parent": "body",
+      "pivot": [
+        205,
+        326
+      ],
+      "texture": "textures/arm_left.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false
+    },
+    {
+      "id": "arm_right",
+      "parent": "body",
+      "pivot": [
+        312,
+        325
+      ],
+      "texture": "textures/arm_right.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false
+    },
+    {
+      "id": "foot_left",
+      "parent": "body",
+      "pivot": [
+        225,
+        423
+      ],
+      "texture": "textures/foot_left.png",
+      "color_role": "primary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "foot_right",
+      "parent": "body",
+      "pivot": [
+        295,
+        423
+      ],
+      "texture": "textures/foot_right.png",
+      "color_role": "primary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "body",
+      "parent": null,
+      "pivot": [
+        262,
+        441
+      ],
+      "texture": "textures/body.png",
+      "color_role": "primary",
+      "motion": "breathe",
+      "generated": false
+    },
+    {
+      "id": "belly",
+      "parent": "body",
+      "pivot": [
+        262,
+        379
+      ],
+      "texture": "textures/belly.png",
+      "color_role": "secondary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "ear_left",
+      "parent": "head",
+      "pivot": [
+        162,
+        229
+      ],
+      "texture": "textures/ear_left.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false
+    },
+    {
+      "id": "ear_inner_left",
+      "parent": "ear_left",
+      "pivot": [
+        115,
+        185
+      ],
+      "texture": "textures/ear_inner_left.png",
+      "color_role": "accent",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "ear_right",
+      "parent": "head",
+      "pivot": [
+        361,
+        230
+      ],
+      "texture": "textures/ear_right.png",
+      "color_role": "primary",
+      "motion": "sway",
+      "generated": false
+    },
+    {
+      "id": "ear_inner_right",
+      "parent": "ear_right",
+      "pivot": [
+        399,
+        151
+      ],
+      "texture": "textures/ear_inner_right.png",
+      "color_role": "accent",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "head",
+      "parent": "body",
+      "pivot": [
+        260,
+        307
+      ],
+      "texture": "textures/head.png",
+      "color_role": "primary",
+      "motion": "head",
+      "generated": false
+    },
+    {
+      "id": "patch_left",
+      "parent": "head",
+      "pivot": [
+        260,
+        240
+      ],
+      "texture": "textures/patch_left.png",
+      "color_role": "secondary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "patch_right",
+      "parent": "head",
+      "pivot": [
+        260,
+        240
+      ],
+      "texture": "textures/patch_right.png",
+      "color_role": "secondary",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "eye_left",
+      "parent": "head",
+      "pivot": [
+        202.5,
+        252.0
+      ],
+      "texture": "textures/eye_left.png",
+      "color_role": null,
+      "motion": "blink",
+      "generated": false,
+      "expressions": {
+        "happy": "textures/eye_left__happy.png",
+        "closed": "textures/eye_left__closed.png"
+      }
+    },
+    {
+      "id": "eye_right",
+      "parent": "head",
+      "pivot": [
+        334.0,
+        234.0
+      ],
+      "texture": "textures/eye_right.png",
+      "color_role": null,
+      "motion": "blink",
+      "generated": false,
+      "expressions": {
+        "happy": "textures/eye_right__happy.png",
+        "closed": "textures/eye_right__closed.png"
+      }
+    },
+    {
+      "id": "nose",
+      "parent": "head",
+      "pivot": [
+        270,
+        257
+      ],
+      "texture": "textures/nose.png",
+      "color_role": "accent",
+      "motion": "",
+      "generated": false
+    },
+    {
+      "id": "mouth",
+      "parent": "head",
+      "pivot": [
+        268,
+        291
+      ],
+      "texture": "textures/mouth.png",
+      "color_role": null,
+      "motion": "smile",
+      "generated": false,
+      "expressions": {
+        "happy": "textures/mouth__happy.png",
+        "open": "textures/mouth__open.png",
+        "chew": "textures/mouth__chew.png"
+      },
+      "mouth_anchor": [
+        268,
+        302.0853658536585
+      ]
+    }
+  ],
+  "face_bounds": [
+    155,
+    180,
+    365,
+    320
+  ],
+  "animations": {
+    "idle": {
+      "duration": 3.2,
+      "loop": true,
+      "breath_scale": 0.018,
+      "head_degrees": 1.5
+    },
+    "blink": {
+      "duration": 0.18,
+      "interval": 4.3
+    },
+    "react": {
+      "duration": 0.85,
+      "jump": 0.025,
+      "tilt_degrees": 8
+    }
+  },
+  "provenance": {
+    "status": "prepared",
+    "method": "authored_vector_rig",
+    "operation": "prepare_demo",
+    "source": "User-provided demo drawing; manually authored geometry, no live diffusion."
+  },
+  "expression_provenance": {
+    "method": "procedural",
+    "version": 1,
+    "source": "Existing facial textures, alpha bounds and pivots; no model inference."
+  }
+}

@@ -8,6 +8,7 @@ from threading import Thread
 import gradio as gr
 
 from .config import ROOT, Settings
+from .demo_character import demo_ready
 from .models import diagnose
 from .pipeline import Pipeline
 from .preview import preview_html
@@ -115,7 +116,7 @@ def generation_events(pipeline, run):
 def build_ui(settings: Settings) -> gr.Blocks:
     report = diagnose(settings)
     pipeline = Pipeline(settings)
-    ready = report["character_ready"] and (settings.device != "cuda" or report["cuda_available"])
+    ready = demo_ready() or (report["character_ready"] and (settings.device != "cuda" or report["cuda_available"]))
     if not ready:
         LOGGER.warning("Preparación pendiente: %s", report.get("character_error") or "CUDA no disponible")
     theme = gr.themes.Base(primary_hue="purple", neutral_hue="purple",

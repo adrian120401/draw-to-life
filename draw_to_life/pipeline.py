@@ -15,6 +15,7 @@ from PIL import Image
 from .config import Settings, STYLES, valid_hex
 from .characters import CharacterFactory
 from .description import describe
+from .demo_character import DemoMatch, recognize_demo, personalize_demo
 from .generation import INTERNAL_INSTRUCTION, LocalGenerator
 from .models import local_models
 from .processing import Drawing, load_image, make_references, preprocess
@@ -42,6 +43,7 @@ class Run:
     mode: str = "legacy"
     animal_override: str | None = None
     puppet: Puppet | None = None
+    demo_match: DemoMatch | None = None
 
 
 class Pipeline:
@@ -96,12 +98,20 @@ class Pipeline:
         write_metadata(directory, metadata)
         try:
             drawing = preprocess(image)
+            demo_match = recognize_demo(image, drawing=drawing) if mode == "auto" and animal in {None, "auto"} else None
+            if demo_match and demo_match.evidence["method"] == "sift_outline_homography":
+                drawing = preprocess(demo_match.aligned)
+            if demo_match:
+                drawing.colors = [{"hex": value, "role": role} for role, value in demo_match.colors.items()]
+                drawing.has_color = bool(demo_match.colors)
             drawing.cropped.save(directory / "cropped.png")
             drawing.isolated.save(directory / "isolated.png")
             preserve = color_mode == "Colores del dibujo" and drawing.has_color
             applied = [color["hex"] for color in drawing.colors] if preserve else palette
             if mode != "legacy":
                 applied = applied[:3] + palette[len(applied[:3]):]
+            if demo_match and color_mode == "Colores del dibujo":
+                applied = [demo_match.colors.get(role, "#F5F3F0") for role in ("primary", "secondary", "accent")]
             reference, control = make_references(drawing, self.settings.image_size, applied, preserve)
             reference.save(directory / "generation_reference.png")
             control.save(directory / "control_scribble.png")
@@ -111,10 +121,17 @@ class Pipeline:
             metadata.update({"detected_colors": drawing.colors, "applied_palette": applied,
                              "preserve_drawing_colors": preserve, "bounding_box": list(drawing.bbox),
                              "bounding_box_coordinates": "original image pixels: left, top, right, bottom",
-                             "original_size": list(drawing.source_size), "warnings": warnings})
+                             "original_size": list(image.size), "warnings": warnings})
+            if demo_match:
+                metadata["demo_recognition"] = demo_match.evidence
+                if demo_match.evidence["method"] == "sift_outline_homography":
+                    metadata["bounding_box_coordinates"] = "registered demo reference pixels: left, top, right, bottom"
+                if color_mode == "Colores del dibujo" and not drawing.has_color:
+                    metadata["warnings"] = [w for w in warnings if "paleta por defecto" not in w]
+                    metadata["warnings"].append("El personaje no tiene color detectable; se conservan las zonas sin pintar claras.")
             write_metadata(directory, metadata)
             return Run(directory, drawing, reference, control, applied, preserve, metadata, started,
-                       mode=mode, animal_override=animal if animal != "auto" else None)
+                       mode=mode, animal_override=animal if animal != "auto" else None, demo_match=demo_match)
         except Exception as exc:
             metadata.update({"status": "failed", "error": str(exc), "duration_seconds": round(time.perf_counter() - started, 2)})
             write_metadata(directory, metadata)
@@ -122,6 +139,8 @@ class Pipeline:
 
     def finish(self, run: Run, progress: Callable[[float, str], None] = lambda _fraction, _message: None) -> Path:
         try:
+            if run.demo_match is not None:
+                return self._finish_demo(run, progress)
             animated = run.mode != "legacy"
             effective_settings = replace(self.settings, image_model=self.settings.character_model) if animated else self.settings
             run.metadata["models"]["image"] = effective_settings.image_model
@@ -132,7 +151,7 @@ class Pipeline:
             self.generator.unload()
             self.characters.unload()
             progress(0.22, "Entendiendo el dibujo con visión local en CPU…")
-            description, warnings = describe(run.drawing.cropped, paths["vision"], self.settings)
+            description, warnings = describe(run.drawing.isolated.convert("RGB"), paths["vision"], self.settings)
             run.metadata.update({"description": description.to_dict(), "status": "generating"})
             run.metadata["warnings"].extend(warnings)
             write_metadata(run.directory, run.metadata)
@@ -160,6 +179,28 @@ class Pipeline:
             write_metadata(run.directory, run.metadata)
             LOGGER.exception("Falló la ejecución %s", run.directory.name)
             raise
+
+    def _finish_demo(self, run, progress) -> Path:
+        progress(.35, "Aplicando los colores a tu personaje…")
+        puppet = personalize_demo(run.demo_match, run.palette,
+                                  run.metadata["color_mode"] == "Colores del dibujo")
+        run.puppet = puppet
+        run.demo_match.aligned.save(run.directory / "registered_photo.png")
+        final = run.directory / "final_character.png"
+        composite(puppet, background="white").convert("RGB").save(final)
+        package = export_package(puppet, run.directory / "character")
+        run.metadata.update({"status": "completed", "generation_mode": "prepared_demo",
+                             "selected_species": "stitch", "base_id": "stitch-demo",
+                             "description": {"creature": puppet.manifest["creature"], "species": "stitch"},
+                             "character_package": package.name, "rig_schema_version": 1,
+                             "applied_palette": puppet.manifest["palette"],
+                             "models": {}, "model_revisions": {}, "device": "cpu",
+                             "live_model_inference": False, "generation_seconds": 0,
+                             "effective_parameters": {"method": "registered_photo_region_colors"},
+                             "duration_seconds": round(time.perf_counter() - run.started, 2)})
+        write_metadata(run.directory, run.metadata)
+        progress(1, "Tu mascota ya tiene vida.")
+        return final
 
     def _finish_character(self, run, paths, description, progress) -> Path:
         if run.animal_override:
